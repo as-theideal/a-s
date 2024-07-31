@@ -1,7 +1,7 @@
 {
   "name": "my-app",
   "version": "0.1.0",
-  "homepage": "as-theideal.github.io/as",
+  "homepage": "https://as-theideal.github.io/as/",
   "private": true,
   "dependencies": {
     "@dotlottie/react-player": "^1.6.19",
