@@ -46,7 +46,7 @@ function Result({
         });
     };
     fetchCorrectAnswers();
-  }, [courseId, elId, prevAttemptAnswers, questions]);
+  }, [courseId, elId, prevAttemptAnswers, questions, showPrevAttemptResults]);
   return (
     questions && (
       <div className={result.result_panal}>
