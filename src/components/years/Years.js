@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import years from './years.module.css'
+import years from "./years.module.css";
 import Toast from "../toast/Toast";
 import supabase from "../../Supabase";
 import axios from "axios";
@@ -45,12 +45,12 @@ function Years() {
   }, [selectedYear, setData, user]);
 
   const pay = (course_id, course_price) => {
-    Toast("سيتم ارسال رسالة الى رقمك بعد انشاء الفاتورة")
+    Toast("سيتم ارسال رسالة الى رقمك بعد انشاء الفاتورة");
     var data = JSON.stringify({
       payment_method_id: 3,
       cartTotal: course_price,
       currency: "EGP",
-      sendSMS:true,
+      sendSMS: true,
       customer: {
         first_name: user.name.split(" ")[0],
         last_name: user.name.split(" ")[1],
@@ -97,31 +97,42 @@ function Years() {
       .catch(function (error) {
         Toast(error);
       });
-      setWait(false)
+    setWait(false);
   };
 
-  return data.length && (
-    <div className={years.years}>
-      {data.map((course, inn) => {
-        return (
-          <div key={inn} style={{pointerEvents:`${wait ? "none" :"all"}`,opacity:`${wait ? 0.5:1}`}}>
-            <img
-              src={`https://storage.bunnycdn.com/as-main/courses_imgs/${course.img_url}?accessKey=113323c4-16ee-47ea-a2c0b1fd2943-03a6-4b68`}
-              alt="img"
-            />
-            <p>{course.title}</p>
-            <span>{course.price} جنيه </span>
-            <button
-              className="primary_bt"
-              onClick={() => {pay(course.id, course.price) ; setWait(true)}}
+  return (
+    data.length && (
+      <div className={years.years}>
+        {data.map((course, inn) => {
+          return (
+            <div
+              key={inn}
+              style={{
+                pointerEvents: `${wait ? "none" : "all"}`,
+                opacity: `${wait ? 0.5 : 1}`,
+              }}
             >
-              شراء
-            </button>
-          </div>
-        );
-      })}
-    </div>
-  )
+              <img
+                src={`https://storage.bunnycdn.com/as-main/courses_imgs/${course.img_url}?accessKey=113323c4-16ee-47ea-a2c0b1fd2943-03a6-4b68`}
+                alt="img"
+              />
+              <p>{course.title}</p>
+              <span>{course.price} جنيه </span>
+              <button
+                className="primary_bt"
+                onClick={() => {
+                  pay(course.id, course.price);
+                  setWait(true);
+                }}
+              >
+                شراء
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    )
+  );
 }
 
 export default Years;
