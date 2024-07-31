@@ -1,0 +1,38 @@
+.payments {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-family: text_font;
+  font-size: 14px;
+  max-width: 500px;
+  margin: auto;
+}
+.titles {
+  display: grid;
+  grid-template-columns: 120px 1fr 1fr 1fr;
+  background-color: var(--primary-color);
+  padding: 5px;
+  border-radius: 5px;
+  color: #fff;
+}
+.invoice {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 120px;
+  padding: 5px;
+  border-radius: 10px;
+  direction: ltr;
+  justify-items: flex-end;
+  text-align: right;
+  align-items: center;
+}
+.invoice button {
+  margin-right: auto;
+  border: none;
+  background-color: var(--secondary-color);
+  color: #fff;
+  border-radius: 10px;
+  padding: 5px 20px;
+  height: 100%;
+  font-size: 15px;
+  font-weight: 900;
+}

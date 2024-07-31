@@ -1,0 +1,87 @@
+.admin {
+  margin-top: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+.add_element_active_panal {
+  display: flex;
+}
+.add_mcq_inputs div {
+  position: relative;
+  display: flex;
+}
+.add_mcq {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 300px;
+}
+.add_mcq_inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.admin input {
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
+  font-size: 17px;
+  padding: 5px 15px;
+  width: 100%;
+}
+.add_mcq_inputs div span {
+  width: 20px;
+  border-radius: 10px;
+  height: 100%;
+  border: 1px solid var(--primary-color);
+  position: absolute;
+  left: -25px;
+}
+.add_mcq_bts {
+  display: flex;
+  justify-content: space-between;
+}
+.admin button {
+  border: none;
+  padding: 10px 20px;
+  font-size: 20px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 10px;
+}
+.add_video,
+.add_file {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.add_video input,
+.add_file input {
+  width: fit-content;
+}
+.admin .courses_list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.courses_list .course {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 250px;
+}
+.courses_list .course .spans {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.course .spans svg {
+  width: 50px;
+}
+.add_course {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

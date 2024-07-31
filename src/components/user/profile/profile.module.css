@@ -1,0 +1,42 @@
+.profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "text_font";
+  width: 100%;
+}
+
+.profile .details {
+  display: flex;
+  color: var(--text-color);
+  gap: 50px;
+  justify-content: center;
+  align-items: center;
+}
+.details .lottie {
+  scale: 1.5;
+}
+.details .cards {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.details .card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+.card p {
+  margin: 0;
+}
+.card svg {
+  width: 20px;
+  height: 20px;
+}
+@media (max-width: 768px) {
+  .profile .details {
+    flex-direction: column;
+  }
+}

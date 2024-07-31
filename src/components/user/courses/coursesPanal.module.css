@@ -1,0 +1,22 @@
+.courses {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.courses .course {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--primary-color);
+  border-radius: 20px;
+  width: 200px;
+  padding: 10px;
+}
+.course p {
+  margin: 0;
+  color: var(--secondary-color);
+}

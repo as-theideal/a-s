@@ -1,0 +1,141 @@
+.course {
+  min-height: 100vh;
+}
+.course .inner {
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 50px;
+  padding-bottom: 50px;
+}
+.course .active_panal {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 5px 3px;
+  border-radius: 10px;
+  width: 100%;
+  border: 1px solid #000;
+}
+.course .elements {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  cursor: pointer;
+}
+.elements .element {
+  border-bottom: 5px solid var(--primary-color);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+p {
+  margin: 0;
+}
+.element .text {
+  color: var(--text-color);
+}
+.elements .element span {
+  font-size: 12px;
+}
+.element svg {
+  width: 30px;
+  height: 30px;
+}
+.questions_panal {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 10px;
+}
+.prev_attempt {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: var(--text-color);
+}
+.result_panal {
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  gap: 20px;
+}
+.per {
+  margin: auto;
+  border: 1px dashed var(--text-color);
+  border-radius: 50%;
+  padding: 10px 15px;
+}
+.result_panal svg {
+  fill: #eee;
+  width: 30px;
+  height: 30px;
+}
+.selected_answers_num {
+  display: flex;
+  justify-content: space-evenly;
+}
+.correct_selection_num,
+.wrong_selection_num {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background-color: var(--primary-color);
+  padding: 5px 12px;
+  border-radius: 10px;
+}
+.wrong_selection_num {
+  background-color: #ff0000d9;
+}
+.answers_section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: scroll;
+  height: 300px;
+}
+.result_panal .card {
+  padding: 10px 20px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.correct_selection,
+.wrong_selection {
+  display: flex;
+  gap: 10px;
+  border: 1px solid #eee;
+  padding: 5px;
+  border-radius: 10px;
+}
+.question {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  color: var(--text-color);
+  position: relative;
+}
+.length {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px;
+  border: 1px double #333;
+  border-radius: 50%;
+}
+.answers {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.bts {
+  display: flex;
+  justify-content: space-evenly;
+}

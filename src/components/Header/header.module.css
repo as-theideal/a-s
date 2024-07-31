@@ -1,0 +1,134 @@
+header{
+    display: flex;
+    height: 100px;
+    width: 100%;
+    font-size: 20px;
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 99;
+}
+header .nav {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+header img {
+    width: 90px;
+    height: 100%;
+}
+
+header a{
+    color: var(--text-color);
+}
+.bts{
+    color: var(--text-color);
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    font-size: 18px;
+    font-family: "text_font";
+    position: relative;
+}
+.bts .login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+.login svg{
+    width: 30px;
+    transform: rotateZ(90deg);
+}
+
+.user_icon svg{
+    width: 50px;
+    cursor: pointer;
+}
+header .drop_menu{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 0 30px 10px;
+    text-align: center;
+}
+header .drop_menu ul li a{
+    display: block;
+    width: 100px;
+    color: var(--text-color);
+}
+header .drop_menu li{
+    margin-bottom: 5px;
+}
+header .drop_menu li:first-of-type{
+    color: var(--secondary-color);
+}
+.drop_menu button{
+    width: 100%;
+    background-color: var(--secondary-color);
+    color: var(--normal-color);
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+   .button {
+    padding: 0.4em 1.3em;
+    background-color: transparent;
+    border-radius: .3em;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: .5s;
+    font-weight: 400;
+    border: 1px solid;
+    font-family: inherit;
+    text-transform: uppercase;
+    color: var(--primary-color);
+    z-index: 1;
+    font-size: 15px;
+    font-weight: 500;
+   }
+   
+   .button::before, .button::after {
+    content: '';
+    width: 50px;
+    height: 50px;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    border-radius: 50%;
+    z-index: -1;
+    background-color: var(--primary-color);
+    transition: 1s ease;
+   }
+   
+   .button::before {
+    top: -1em;
+    left: -1em;
+   }
+   
+   .button::after {
+    left: calc(100% + 1em);
+    top: calc(100% + 1em);
+   }
+   
+   .button:hover::before, .button:hover::after {
+    height: 410px;
+    width: 410px;
+   }
+   
+   .button:hover {
+    color: #eee;
+   }
+
+@media (max-width:768px) {
+    /* header img{
+        width: 50px;
+        height: 40px;
+    } */
+
+}
