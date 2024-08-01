@@ -116,7 +116,6 @@
   grid-template-rows: 1fr;
   font-size: 3vw;
   position: relative;
-  padding-top: 20px;
 }
 .portfolio .wave {
   position: absolute;
@@ -272,6 +271,7 @@
   transition-duration: 0.3s;
   box-shadow: var(--shadow);
   border: 1px dotted var(--text-color);
+  text-align: center;
 }
 svg {
   fill: var(--primary-color);

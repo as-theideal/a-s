@@ -1,80 +1,90 @@
-.form{
-    background:transparent;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 320px;                                   
-    margin: auto;
-    margin-bottom: 50px;
-    margin-top: 150px;
-    padding: 20px 10px;
-    border-radius: 10px;
-    gap: 10px;
-    box-shadow: var(--shadow);
+.form {
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 320px;
+  margin: auto;
+  margin-bottom: 50px;
+  margin-top: 150px;
+  padding: 20px 10px;
+  border-radius: 10px;
+  gap: 10px;
+  box-shadow: var(--shadow);
 }
-.form .inner{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.form .inner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
-.form .inner div{
-    display: flex;
-    position: relative;
-    padding-top: 10px;
+.form .inner div {
+  display: flex;
+  position: relative;
+  padding-top: 10px;
 }
-.form img{
-    width: 100px;
+.form .inner div div {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  translate: 0 -50%;
 }
-hr{
-    width: 20%;
-    background-color: var(--text-color);
+.form .inner div div svg {
+  width: 25px;
+  height: 25px;
 }
-.form input{
-    padding-top: 15px ;
-    border: none;
-    outline: none;
-    font-size: 15px;
-    background-color: var(--normal-color);
-    border-bottom: var(--primary-color) 1px solid;
-    color: var(--text-color);
+.form img {
+  width: 100px;
 }
-.form input[name = "submit"]{
-    background-color: var(--primary-color);
-    color: var(--text-color);
-    font-size: 20px;
-    padding: 10px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    border: 1px solid var(--secondary-color);
-    outline: 1px solid var(--primary-color);
-    box-sizing: border-box;
+hr {
+  width: 20%;
+  background-color: var(--text-color);
 }
-.form button{
-    border: none;
-    outline: none;
-    background: transparent;
-    cursor: pointer;
-    display: flex;
+.form input {
+  padding-top: 15px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  background-color: var(--normal-color);
+  border-bottom: var(--primary-color) 1px solid;
+  color: var(--text-color);
 }
-.form button img{
-    height: 50px;
-    width: 50px;
+.form input[name="submit"] {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  font-size: 20px;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  border: 1px solid var(--secondary-color);
+  outline: 1px solid var(--primary-color);
+  box-sizing: border-box;
 }
-.form input[name = "submit"]:hover{
-    background-color: transparent;
-    color: var(--primary-color );
+.form button {
+  border: none;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
 }
-.form .inner div span{
-    position: absolute;
-    animation-duration: 0.5s;
-    animation-fill-mode: forwards;
-    color: #666;
+.form button img {
+  height: 50px;
+  width: 50px;
+}
+.form input[name="submit"]:hover {
+  background-color: transparent;
+  color: var(--primary-color);
+}
+.form .inner div span {
+  position: absolute;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  color: #666;
 }
 
-@media (max-width : 768px) {
-    .form {
-        width: 90vw;
-        padding: 20px 0;
-        margin-bottom: 50px;
-    }
+@media (max-width: 768px) {
+  .form {
+    width: 90vw;
+    padding: 20px 0;
+    margin-bottom: 50px;
+  }
 }
