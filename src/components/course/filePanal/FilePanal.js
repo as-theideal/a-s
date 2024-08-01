@@ -12,7 +12,7 @@ function FilePanal({ data }) {
           width: "fit-content",
           alignItems: "center",
         }}
-        href={`https://storage.bunnycdn.com/as-files/${data.url}?accessKey=bf95e41d-8334-4927-a8e15ccbeca1-76ca-4545&download`}
+        href={`https://storage.bunnycdn.com/as-files/files/${data.url}?accessKey=bf95e41d-8334-4927-a8e15ccbeca1-76ca-4545&download`}
       >
         <svg
           style={{ fill: "var(--text-color)" }}

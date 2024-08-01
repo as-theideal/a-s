@@ -6,6 +6,7 @@ import HomeYears from "./HomeYears";
 import edge from "../../assets/edge.lottie";
 import { DotLottiePlayer } from "@dotlottie/react-player";
 import "@dotlottie/react-player/dist/index.css";
+import axios from "axios";
 
 // import home_banner from '../../assets/home_banner.jpg'
 function Home({ isLoggedIn }) {

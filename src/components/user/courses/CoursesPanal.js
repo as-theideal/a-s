@@ -47,7 +47,7 @@ function Courses({ userId, user }) {
             <NavLink to={"./course/" + course.url} key={inn}>
               <div className={coursesStyle.course}>
                 <img
-                  src={`https://storage.bunnycdn.com/as-main/courses_imgs/${course.img_url}?accessKey=113323c4-16ee-47ea-a2c0b1fd2943-03a6-4b68`}
+                  src={`https://ahmedsalama.netlify.app/https://storage.bunnycdn.com/as-main/courses_imgs/${course.img_url}?accessKey=49a07160-e80d-44dc-883283f465a4-aae7-4c90`}
                   alt="img"
                 />
                 <hr />
