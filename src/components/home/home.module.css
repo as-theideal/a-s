@@ -129,7 +129,7 @@
   width: 5em !important;
   height: 5em !important;
   position: absolute;
-  top: -30%;
+  top: -50%;
   left: 50%;
   transform: translateX(-50%);
 }
