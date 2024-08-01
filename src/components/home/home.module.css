@@ -10,6 +10,7 @@
 
 .home {
   position: relative;
+  overflow: hidden;
 }
 .scroll {
   position: absolute;
@@ -70,7 +71,6 @@
   position: relative;
   margin-top: 100px;
   box-sizing: border-box;
-  overflow: hidden;
 }
 .home .show_curr_pg {
   position: absolute;
