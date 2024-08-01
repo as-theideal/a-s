@@ -29,11 +29,20 @@ function Admin() {
   const mcqTitle = useRef("");
   const answers_name = [setAnswer1, setAnswer2, setAnswer3, setAnswer4];
   const nav = useNavigate();
+
   const authenticate = async () => {
-    (await supabase.auth.getUser()).data.user.id ===
-    "d4cd9e53-d14f-4c48-8352-87ed4fc0fc62"
-      ? setAuthenticated(true)
-      : nav("/");
+    await supabase.auth.getUser().then((data) => {
+      if (data.data.user) {
+        if (
+          data.data.user.id === "5c0b5606-d91b-46b3-9469-c38c98b5d0ff" ||
+          data.data.user.id === "c6bf9eca-3ab2-4f98-bece-f7e79403fcd3"
+        ) {
+          setAuthenticated(true);
+        }
+      } else {
+        nav("/");
+      }
+    });
   };
   if (!authenticated) {
     authenticate();
@@ -173,235 +182,237 @@ function Admin() {
       .select("id")
       .then(({ data, error }) => setNewCourseId(data[0].id));
   };
-  return (
-    <div className={admin.admin}>
-      <div className={admin.add_element_active_panal}>
-        {activePanal === "addmcq" ? (
-          <div className={admin.add_mcq}>
-            <input ref={mcqTitle} type="text" placeholder="العنوان" />
+  if (authenticated) {
+    return (
+      <div className={admin.admin}>
+        <div className={admin.add_element_active_panal}>
+          {activePanal === "addmcq" ? (
+            <div className={admin.add_mcq}>
+              <input ref={mcqTitle} type="text" placeholder="العنوان" />
 
-            <div className={admin.add_mcq_inputs} id="add_mcq_inputs">
+              <div className={admin.add_mcq_inputs} id="add_mcq_inputs">
+                <input
+                  type="text"
+                  placeholder="السؤال :"
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                />
+                <div>
+                  <input
+                    type="text"
+                    placeholder="ا"
+                    id="ا"
+                    value={answer1}
+                    onChange={(e) => setAnswer1(e.target.value)}
+                  />
+                  <span
+                    onClick={addCorrectAnswer}
+                    type="text"
+                    id="0"
+                    style={{
+                      backgroundColor: `${
+                        correctAnswers[questionsI] === 0
+                          ? "var(--primary-color)"
+                          : "#eee"
+                      }`,
+                    }}
+                  ></span>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="ب"
+                    id="ب"
+                    value={answer2}
+                    onChange={(e) => setAnswer2(e.target.value)}
+                  />
+                  <span
+                    onClick={addCorrectAnswer}
+                    type="text"
+                    id="1"
+                    style={{
+                      backgroundColor: `${
+                        correctAnswers[questionsI] === 1
+                          ? "var(--primary-color)"
+                          : "#eee"
+                      }`,
+                    }}
+                  ></span>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="ج"
+                    id="ج"
+                    value={answer3}
+                    onChange={(e) => setAnswer3(e.target.value)}
+                  />
+                  <span
+                    onClick={addCorrectAnswer}
+                    type="text"
+                    id="2"
+                    style={{
+                      backgroundColor: `${
+                        correctAnswers[questionsI] === 2
+                          ? "var(--primary-color)"
+                          : "#eee"
+                      }`,
+                    }}
+                  ></span>
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="د"
+                    id="د"
+                    value={answer4}
+                    onChange={(e) => setAnswer4(e.target.value)}
+                  />
+                  <span
+                    onClick={addCorrectAnswer}
+                    type="text"
+                    id="3"
+                    style={{
+                      backgroundColor: `${
+                        correctAnswers[questionsI] === 3
+                          ? "var(--primary-color)"
+                          : "#eee"
+                      }`,
+                    }}
+                  ></span>
+                </div>
+              </div>
+              <div className={admin.add_mcq_bts}>
+                <button onClick={next}>التالي</button>
+                <button onClick={prev}>السابق</button>
+                <button onClick={addMcq}>تسليم</button>
+              </div>
+            </div>
+          ) : activePanal === "addvideo" ? (
+            <div className={admin.add_video}>
+              <input type="text" ref={videoIdToAdd} placeholder="ايدي الفييو" />
               <input
                 type="text"
-                placeholder="السؤال :"
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
+                ref={videoTitleToAdd}
+                placeholder="عنوان الفيديو"
               />
-              <div>
-                <input
-                  type="text"
-                  placeholder="ا"
-                  id="ا"
-                  value={answer1}
-                  onChange={(e) => setAnswer1(e.target.value)}
-                />
-                <span
-                  onClick={addCorrectAnswer}
-                  type="text"
-                  id="0"
-                  style={{
-                    backgroundColor: `${
-                      correctAnswers[questionsI] === 0
-                        ? "var(--primary-color)"
-                        : "#eee"
-                    }`,
-                  }}
-                ></span>
-              </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="ب"
-                  id="ب"
-                  value={answer2}
-                  onChange={(e) => setAnswer2(e.target.value)}
-                />
-                <span
-                  onClick={addCorrectAnswer}
-                  type="text"
-                  id="1"
-                  style={{
-                    backgroundColor: `${
-                      correctAnswers[questionsI] === 1
-                        ? "var(--primary-color)"
-                        : "#eee"
-                    }`,
-                  }}
-                ></span>
-              </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="ج"
-                  id="ج"
-                  value={answer3}
-                  onChange={(e) => setAnswer3(e.target.value)}
-                />
-                <span
-                  onClick={addCorrectAnswer}
-                  type="text"
-                  id="2"
-                  style={{
-                    backgroundColor: `${
-                      correctAnswers[questionsI] === 2
-                        ? "var(--primary-color)"
-                        : "#eee"
-                    }`,
-                  }}
-                ></span>
-              </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="د"
-                  id="د"
-                  value={answer4}
-                  onChange={(e) => setAnswer4(e.target.value)}
-                />
-                <span
-                  onClick={addCorrectAnswer}
-                  type="text"
-                  id="3"
-                  style={{
-                    backgroundColor: `${
-                      correctAnswers[questionsI] === 3
-                        ? "var(--primary-color)"
-                        : "#eee"
-                    }`,
-                  }}
-                ></span>
-              </div>
+              <button onClick={addVideo}>اضافة الفيديو</button>
             </div>
-            <div className={admin.add_mcq_bts}>
-              <button onClick={next}>التالي</button>
-              <button onClick={prev}>السابق</button>
-              <button onClick={addMcq}>تسليم</button>
-            </div>
-          </div>
-        ) : activePanal === "addvideo" ? (
-          <div className={admin.add_video}>
-            <input type="text" ref={videoIdToAdd} placeholder="ايدي الفييو" />
+          ) : (
+            activePanal === "addfile" && (
+              <div className={admin.add_file}>
+                <input type="text" ref={fileIdToAdd} placeholder="ايدي الملف" />
+                <input
+                  type="text"
+                  ref={fileTitleToAdd}
+                  placeholder="عنوان الملف"
+                />
+                <button onClick={addFile}>اضافة الملف</button>
+              </div>
+            )
+          )}
+        </div>
+        <hr />
+        <div className={admin.courses_list}>
+          {courses.map((course, inn) => {
+            return (
+              <div className={admin.course} key={inn}>
+                <img
+                  src={`https://as-theideal.b-cdn.net/courses_imgs/${course.img_url}`}
+                  alt="img"
+                />
+                <p>{course.title}</p>
+                <span>السنة الدراسية : {course.year}</span>
+                <div className={admin.spans}>
+                  <span
+                    onClick={() => {
+                      setActivePanal("addmcq");
+                      setActiveCourse(course.id);
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      fill="#e8eaed"
+                    >
+                      <path d="M560-360q17 0 29.5-12.5T602-402q0-17-12.5-29.5T560-444q-17 0-29.5 12.5T518-402q0 17 12.5 29.5T560-360Zm-30-128h60q0-29 6-42.5t28-35.5q30-30 40-48.5t10-43.5q0-45-31.5-73.5T560-760q-41 0-71.5 23T446-676l54 22q9-25 24.5-37.5T560-704q24 0 39 13.5t15 36.5q0 14-8 26.5T578-596q-33 29-40.5 45.5T530-488ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z" />
+                    </svg>
+                  </span>
+                  <span
+                    onClick={() => {
+                      setActivePanal("addvideo");
+                      setActiveCourse(course.id);
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      fill="#e8eaed"
+                    >
+                      <path d="m380-300 280-180-280-180v360ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z" />
+                    </svg>
+                  </span>
+                  <span
+                    onClick={() => {
+                      setActivePanal("addfile");
+                      setActiveCourse(course.id);
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 -960 960 960"
+                      width="24px"
+                      fill="#e8eaed"
+                    >
+                      <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <hr />
+        {newCourseId ? (
+          <p
+            style={{ textAlign: "center", width: "100%" }}
+            onClick={async () =>
+              await navigator.clipboard
+                .writeText(newCourseId)
+                .then(Toast("تم النسخ"))
+            }
+          >
+            {newCourseId}
+          </p>
+        ) : (
+          <div className={admin.add_course}>
             <input
               type="text"
-              ref={videoTitleToAdd}
-              placeholder="عنوان الفيديو"
+              ref={courseTitleToAdd}
+              placeholder="عنوان الكورس"
             />
-            <button onClick={addVideo}>اضافة الفيديو</button>
+            <input
+              type="number"
+              ref={courseYearToAdd}
+              placeholder="السنة الدراسية"
+            />
+            <input type="text" ref={courseImgToAdd} placeholder="اسم الصورة" />
+            <input
+              type="number"
+              ref={coursePriceToAdd}
+              placeholder="سعر الكورس"
+            />
+            <button onClick={addCourse}>اضف الكورس</button>
           </div>
-        ) : (
-          activePanal === "addfile" && (
-            <div className={admin.add_file}>
-              <input type="text" ref={fileIdToAdd} placeholder="ايدي الملف" />
-              <input
-                type="text"
-                ref={fileTitleToAdd}
-                placeholder="عنوان الملف"
-              />
-              <button onClick={addFile}>اضافة الملف</button>
-            </div>
-          )
         )}
       </div>
-      <hr />
-      <div className={admin.courses_list}>
-        {courses.map((course, inn) => {
-          return (
-            <div className={admin.course} key={inn}>
-              <img
-                src={`https://as-theideal.b-cdn.net/courses_imgs/${course.img_url}`}
-                alt="img"
-              />
-              <p>{course.title}</p>
-              <span>السنة الدراسية : {course.year}</span>
-              <div className={admin.spans}>
-                <span
-                  onClick={() => {
-                    setActivePanal("addmcq");
-                    setActiveCourse(course.id);
-                  }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#e8eaed"
-                  >
-                    <path d="M560-360q17 0 29.5-12.5T602-402q0-17-12.5-29.5T560-444q-17 0-29.5 12.5T518-402q0 17 12.5 29.5T560-360Zm-30-128h60q0-29 6-42.5t28-35.5q30-30 40-48.5t10-43.5q0-45-31.5-73.5T560-760q-41 0-71.5 23T446-676l54 22q9-25 24.5-37.5T560-704q24 0 39 13.5t15 36.5q0 14-8 26.5T578-596q-33 29-40.5 45.5T530-488ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z" />
-                  </svg>
-                </span>
-                <span
-                  onClick={() => {
-                    setActivePanal("addvideo");
-                    setActiveCourse(course.id);
-                  }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#e8eaed"
-                  >
-                    <path d="m380-300 280-180-280-180v360ZM160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-80h640v-480H160v480Zm0 0v-480 480Z" />
-                  </svg>
-                </span>
-                <span
-                  onClick={() => {
-                    setActivePanal("addfile");
-                    setActiveCourse(course.id);
-                  }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#e8eaed"
-                  >
-                    <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z" />
-                  </svg>
-                </span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      <hr />
-      {newCourseId ? (
-        <p
-          style={{ textAlign: "center", width: "100%" }}
-          onClick={async () =>
-            await navigator.clipboard
-              .writeText(newCourseId)
-              .then(Toast("تم النسخ"))
-          }
-        >
-          {newCourseId}
-        </p>
-      ) : (
-        <div className={admin.add_course}>
-          <input
-            type="text"
-            ref={courseTitleToAdd}
-            placeholder="عنوان الكورس"
-          />
-          <input
-            type="number"
-            ref={courseYearToAdd}
-            placeholder="السنة الدراسية"
-          />
-          <input type="text" ref={courseImgToAdd} placeholder="اسم الصورة" />
-          <input
-            type="number"
-            ref={coursePriceToAdd}
-            placeholder="سعر الكورس"
-          />
-          <button onClick={addCourse}>اضف الكورس</button>
-        </div>
-      )}
-    </div>
-  );
+    );
+  }
 }
 
 export default Admin;
