@@ -113,7 +113,7 @@ function Years() {
               }}
             >
               <img
-                src={`https://storage.bunnycdn.com/as-main/courses_imgs/${course.img_url}?accessKey=113323c4-16ee-47ea-a2c0b1fd2943-03a6-4b68`}
+                src={`https://as-theideal.b-cdn.net/courses_imgs/${course.img_url}`}
                 alt="img"
               />
               <p>{course.title}</p>
