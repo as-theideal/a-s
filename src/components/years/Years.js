@@ -109,7 +109,7 @@ function Years() {
               key={inn}
               style={{
                 pointerEvents: `${wait ? "none" : "all"}`,
-                opacity: `${wait ? 0.6 : 1}`,
+                opacity: `${wait ? 0.5 : 1}`,
               }}
             >
               <img
