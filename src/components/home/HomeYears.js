@@ -36,7 +36,7 @@ function HomeYears() {
         animate="visible"
         className={home.years}
       >
-        <div className={home.item} style={{ top: 0, right: 0 }}>
+        <div className={home.item} id={home.special_item}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             x="0px"
@@ -78,11 +78,22 @@ function HomeYears() {
           <img src={fb} alt="facebook QR" />
         </div>
 
-        <div className={home.item} style={{ gridColumnStart: 2 }}>
-          <ReactSVG src={phone} fill="#eee" />
-          <p>01028282308</p>
+        <div className={home.middle_col}>
+          <div className={home.item}>
+            <ReactSVG src={first} style={{ marginTop: -10 }} />
+            <NavLink to="years/1">اولى ثانوي</NavLink>
+          </div>
+          <div className={home.item}>
+            <ReactSVG src={second} style={{ marginTop: -10 }} />
+            <NavLink to="years/2">ثانية ثانوي</NavLink>
+          </div>
+          <div className={home.item}>
+            <ReactSVG src={third} style={{ marginTop: -10 }} />
+            <NavLink to="years/3">ثالثة ثانوي</NavLink>
+          </div>
         </div>
-        <div className={home.item} style={{ top: 0, left: 0 }}>
+
+        <div className={home.item} id={home.special_item}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             x="0px"
@@ -119,31 +130,6 @@ function HomeYears() {
             تواصل معانا
           </a>
           <img src={wats} alt="whatsapp QR" />
-        </div>
-
-        <div
-          className={home.item}
-          style={{ gridRowStart: 2, gridColumnStart: 1 }}
-        >
-          <ReactSVG src={first} style={{ marginTop: -10 }} />
-          <NavLink to="years/1">اولى ثانوي</NavLink>
-        </div>
-        <div
-          className={home.item}
-          style={{ gridRowStart: 2, gridColumnStart: 2 }}
-        >
-          <ReactSVG src={second} style={{ marginTop: -10 }} />
-          <NavLink to="years/2">ثانية ثانوي</NavLink>
-        </div>
-        <div
-          className={home.item}
-          style={{
-            gridRowStart: 2,
-            gridColumnStart: 3,
-          }}
-        >
-          <ReactSVG src={third} style={{ marginTop: -10 }} />
-          <NavLink to="years/3">ثالثة ثانوي</NavLink>
         </div>
       </motion.div>
       <Footer />

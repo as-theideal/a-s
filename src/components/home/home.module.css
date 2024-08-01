@@ -244,11 +244,17 @@
   font-family: "text_font";
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr;
   justify-items: center;
-  align-items: flex-start;
+  align-items: center;
   flex: 1;
   width: 100%;
+}
+.middle_col {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 .item {
   background-color: #005483;
@@ -291,19 +297,14 @@ svg {
   text-decoration: underline;
 }
 .item a:hover {
-  color: var(--normal-color);
+  color: var(--text-color);
 }
-.item:nth-of-type(3),
-.item:nth-of-type(1) {
-  position: absolute;
+#special_item {
   overflow: hidden;
   transition-duration: 1s;
   z-index: 1;
-  translate: 50%;
 }
-.item:nth-of-type(1) {
-  translate: -50%;
-}
+
 .item img {
   position: absolute;
   width: 90%;
@@ -312,11 +313,10 @@ svg {
   visibility: hidden;
   transition-duration: 1s;
 }
-.item:nth-of-type(3):hover,
-.item:nth-of-type(1):hover {
+#special_item:hover {
   height: 310px;
 }
-.item:hover img {
+#special_item:hover img {
   bottom: 20px;
   visibility: visible;
 }
@@ -337,9 +337,8 @@ svg {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 3fr;
     font-size: 6vw;
-    margin: 120px 0;
-    padding: 0;
-    margin-bottom: 300px;
+    margin: 50px 0;
+    padding: 0 !important;
   }
   .portfolio h2 span {
     bottom: 30%;
@@ -352,10 +351,18 @@ svg {
   .services .cards {
     gap: 50px;
     grid-template-columns: 1fr;
-    /* grid-template-rows: 1fr 1fr; */
   }
   .edge {
     height: 100px;
+  }
+  .services {
+    padding-bottom: 0 !important;
+  }
+  .years {
+    padding-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
   }
 }
 @media (max-width: 768px) {
@@ -364,28 +371,18 @@ svg {
     overflow: visible;
   }
   .portfolio {
-    margin-bottom: 50px;
+    padding-bottom: 70px;
   }
-  .services img {
-    width: 100%;
-  }
-  .years {
+  .services {
     display: flex;
     flex-direction: column;
-    gap: 50px;
-    justify-content: center;
-    align-items: center;
-    padding-bottom: 100px;
+    padding-bottom: 70px;
   }
-  .years .item:nth-of-type(2) {
-    margin-top: 400px;
+  .services .cards {
+    width: 100%;
   }
-  .years .item:nth-of-type(1),
-  .years .item:nth-of-type(3) {
-    right: 50% !important;
-    translate: 50%;
-  }
-  .years .item:nth-of-type(1) {
-    margin-top: 200px;
+
+  .years .middle_col {
+    gap: 20px;
   }
 }
