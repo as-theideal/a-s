@@ -29,11 +29,9 @@ function Home({ isLoggedIn }) {
       className={home.home}
       style={{ height: `${window.innerWidth >= 768 && "100vh"}` }}
     >
-      {currPg < 2 && (
-        <div className={home.edge}>
-          <DotLottiePlayer src={edge} autoplay loop></DotLottiePlayer>
-        </div>
-      )}
+      <div className={home.edge}>
+        <DotLottiePlayer src={edge} autoplay loop></DotLottiePlayer>
+      </div>
 
       <div className="container">
         <div
