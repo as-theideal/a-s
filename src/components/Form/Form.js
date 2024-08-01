@@ -116,7 +116,7 @@ function Form({ type, sendUserData }) {
               name="email"
               required
               type="text"
-              placeholder="البريد الالكتوني :"
+              placeholder="البريد الالكتروني :"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -126,7 +126,7 @@ function Form({ type, sendUserData }) {
                 right: 0,
               }}
             >
-              البريد الالكتوني :
+              البريد الالكتروني :
             </span>
           </div>
           <div>

@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header/Header";
 import { useEffect, useState } from "react";
@@ -41,7 +41,7 @@ function App() {
     }
   }, [isLoggedIn, setIsLoggedIn]);
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Header
         isLoggedIn={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
@@ -57,7 +57,7 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/success/*" element={<Success />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
