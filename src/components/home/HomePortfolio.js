@@ -3,8 +3,9 @@ import home from "./home.module.css";
 import { motion } from "framer-motion";
 import portfoliolottie from "../../assets/portfolioPgLottie.json";
 import { DotLottiePlayer } from "@dotlottie/react-player";
-import portfolioimg from "../../assets/portfolio_img.png";
-import portfolioimgmini from "../../assets/portfolio_img_mini.png";
+import portfolioimg from "../../assets/portfolio.png";
+import Lottie from "react-lottie-player";
+import wave from "../../assets/wave1.json";
 const HomePortfolio = () => {
   const animate = {
     hidden: {
@@ -32,7 +33,7 @@ const HomePortfolio = () => {
       animate="visible"
       className={home.portfolio}
     >
-      {window.innerWidth >= 450 ? (
+      {window.innerWidth > 450 ? (
         <>
           <div className={home.scroll}>
             <span>Scroll</span>
@@ -50,8 +51,18 @@ const HomePortfolio = () => {
               ></DotLottiePlayer>
             </div>
             <h1>Dr \</h1>
-            <h2>hmed Salama</h2>
-            <span>The ideal in chemistry</span>
+            <h2>
+              Ahmed Salama
+              <span>The ideal in chemistry</span>
+            </h2>
+            <div className={home.wave}>
+              <Lottie
+                loop
+                animationData={wave}
+                play
+                style={{ width: 150, height: 150 }}
+              />
+            </div>
           </div>
         </>
       ) : (
@@ -65,11 +76,20 @@ const HomePortfolio = () => {
               ></DotLottiePlayer>
             </div>
             <h1>Dr \</h1>
-            <h2>hmed Salama</h2>
-            <span>The ideal in chemistry</span>
+            <h2>
+              Ahmed Salama<span>The ideal in chemistry</span>
+            </h2>
           </div>
           <div className={home.portfolio_img}>
-            <img src={portfolioimgmini} alt="personal img" loading="lazy" />
+            <img src={portfolioimg} alt="personal img" loading="lazy" />
+          </div>
+          <div className={home.wave}>
+            <Lottie
+              loop
+              animationData={wave}
+              play
+              style={{ width: 150, height: 150 }}
+            />
           </div>
         </>
       )}

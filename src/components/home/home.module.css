@@ -108,25 +108,35 @@
 }
 .portfolio {
   flex: 1;
-  display: flex;
-  justify-content: space-evenly;
+  display: grid;
+  justify-content: center;
   align-items: center;
-  padding-left: 40px;
+  justify-items: center;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
   font-size: 3vw;
-  width: 100%;
+  position: relative;
+}
+.portfolio .wave {
+  position: absolute;
+  bottom: -50px;
+}
+.portfolio .wave div {
+  width: 100% !important;
+  height: 100% !important;
 }
 .portfolio .portofolio_lottie {
   width: 5em !important;
   height: 5em !important;
   position: absolute;
-  top: -70%;
+  top: -30%;
   left: 50%;
   transform: translateX(-50%);
 }
 .portfolio .text {
   display: flex;
   flex-direction: column;
-  min-width: 132px;
+  height: fit-content;
   position: relative;
   direction: ltr;
   text-wrap: nowrap;
@@ -142,91 +152,69 @@
   color: var(--primary-color);
   margin: 0;
   font-family: "main_font";
+  text-align: center;
+  position: relative;
 }
-.portfolio h2::before {
-  content: "A";
-  position: absolute;
-  left: 0;
-  transform: translateX(-100%);
+.portfolio h2::first-letter {
   font-size: 1.3em;
-  font-family: "main_font";
+  vertical-align: text-top;
 }
 
-.portfolio .text span {
+.portfolio h2 span {
   position: absolute;
-  bottom: 9px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 35%;
+  left: 25%;
   letter-spacing: 5px;
   color: var(--secondary-color);
-  font-size: 0.38em;
+  font-size: 0.2em;
   text-transform: uppercase;
   font-family: "second_font";
 }
 .portfolio .portfolio_img {
-  transform: translateY(15px);
-  overflow: hidden;
-  height: calc(100vh - 100px);
+  height: 80%;
+  width: 90%;
 }
 .portfolio_img img {
   height: 100%;
-  width: 100%;
 }
 
 .services {
   flex: 1;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
   justify-content: space-between;
   align-items: center;
   height: 100%;
   position: relative;
 }
-.services img {
-  width: 40%;
-  height: 70%;
-}
 
 .services .cards {
   flex: 1;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  /* align-self: self-start; */
   align-items: center;
-  gap: 30px 50px;
+  gap: 50px;
 }
 .card {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
+  gap: 10px;
   flex-direction: column;
-  padding: 20px;
-  border-radius: 20px;
-  width: 200px;
-  height: 150px;
-  justify-content: flex-end;
   align-items: center;
 }
-
-.card > div:first-of-type {
-  position: absolute;
-  animation: upanddown 1s infinite alternate;
-  scale: 0.5;
-  width: 100%;
-  translate: 5px;
+.card img {
+  width: 150px;
+  height: 150px;
 }
-.card div div svg {
-  width: 100%;
-  height: 100%;
-}
-
 .card p {
   padding: 10px;
   color: var(--normal-color);
   font-family: "text_font";
   font-size: 15px;
   margin: 0;
-  background-color: var(--primary-color);
+  background-color: #7250d8;
   border-radius: 10px;
   position: relative;
 }
@@ -245,10 +233,10 @@
 }
 .card p:hover::before {
   opacity: 1;
-  background-color: var(--primary-color);
+  background-color: #7250d8;
 }
 .card p:hover {
-  background-color: var(--secondary-color);
+  background-color: #ef148c;
 }
 /* ////////////////// */
 .years {
@@ -260,11 +248,11 @@
   justify-items: center;
   align-items: flex-start;
   flex: 1;
-  /* overflow: hidden; */
   width: 100%;
 }
 .item {
-  background-color: var(--primary-color);
+  background-color: #005483;
+  opacity: 0.9;
   padding: 15px 25px;
   display: flex;
   flex-direction: column;
@@ -299,7 +287,7 @@ svg {
 .item p {
   font-size: 20px;
   font-weight: 700;
-  color: var(--text-color);
+  color: var(--normal-color);
   text-decoration: underline;
 }
 .item a:hover {
@@ -346,17 +334,25 @@ svg {
 
 @media (max-width: 450px) {
   .portfolio {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 3fr;
     font-size: 6vw;
     margin: 120px 0;
     padding: 0;
-    max-height: calc(100vh - 220px);
+    margin-bottom: 300px;
   }
-  .portfolio .portfolio_img {
-    height: 90vh;
+  .portfolio h2 span {
+    bottom: 30%;
+  }
+  .services {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 100px;
   }
   .services .cards {
     gap: 50px;
+    grid-template-columns: 1fr;
+    /* grid-template-rows: 1fr 1fr; */
   }
   .edge {
     height: 100px;
@@ -368,12 +364,7 @@ svg {
     overflow: visible;
   }
   .portfolio {
-    gap: 30px;
-    margin-bottom: 120px;
-  }
-  .services {
-    flex-direction: column;
-    gap: 50px;
+    margin-bottom: 50px;
   }
   .services img {
     width: 100%;

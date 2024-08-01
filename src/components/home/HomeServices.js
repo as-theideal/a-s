@@ -1,12 +1,11 @@
 import React from "react";
 import home from "./home.module.css";
-import timesaving from "../../assets/save-time.svg";
-import highquality from "../../assets/high-quality.svg";
-import homeworks from "../../assets/tests.svg";
-import qanda from "../../assets/faq.svg";
-import services_banner from "../../assets/cartoon-smoke-illustrated.png";
+import timesaving from "../../assets/time.png";
+import highquality from "../../assets/highQuality.png";
+import homeworks from "../../assets/exams.png";
+import qanda from "../../assets/faq.png";
+import services_banner from "../../assets/view-3d-male-chemist-lab.png";
 import { motion } from "framer-motion";
-import { ReactSVG } from "react-svg";
 
 function HomeBenefits() {
   const animate = {
@@ -34,8 +33,8 @@ function HomeBenefits() {
           animate="visible"
           className={home.card}
         >
-          <ReactSVG src={timesaving} style={{ top: -70, marginRight: -30 }} />
-          <p>وفر وقتك و اتعلم من بيتك</p>
+          <img src={timesaving} alt="service_img" />
+          <p>وفر وقتك الغالي</p>
         </motion.div>
 
         <motion.div
@@ -44,7 +43,7 @@ function HomeBenefits() {
           animate="visible"
           className={home.card}
         >
-          <ReactSVG src={highquality} style={{ top: -45 }} />
+          <img src={highquality} alt="service_img" />
           <p>محتوى على اعلى مستوى</p>
         </motion.div>
 
@@ -54,7 +53,7 @@ function HomeBenefits() {
           animate="visible"
           className={home.card}
         >
-          <ReactSVG src={homeworks} style={{ top: -110, marginRight: -30 }} />
+          <img src={homeworks} alt="service_img" />
 
           <p>واجبات و امتحانات دورية</p>
         </motion.div>
@@ -63,8 +62,9 @@ function HomeBenefits() {
           initial="hidden"
           animate="visible"
           className={home.card}
+          style={{ zIndex: 2 }}
         >
-          <ReactSVG src={qanda} style={{ top: -75 }} />
+          <img src={qanda} alt="service_img" />
 
           <p>اسأل و احنا نجاوبك</p>
         </motion.div>
