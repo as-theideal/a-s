@@ -1,14 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import profile from "./profile.module.css";
 import Lottie from "react-lottie-player";
 import identity from "../../../assets/Animation - 1722197614706.json";
+import supabase from "../../../Supabase";
+import Toast from "../../toast/Toast";
 
 function Profile({ user }) {
+  const [newPass, setNewPass] = useState("");
+  const [reNewPass, setReNewPass] = useState("");
+  const hanldeUpdatePass = async () => {
+    if (newPass === reNewPass) {
+      await supabase.auth
+        .updateUser({
+          password: newPass,
+        })
+        .then(({ error }) => {
+          if (error) {
+            Toast(error.message);
+            return;
+          } else {
+            Toast("تم تغيير كلمة السر");
+          }
+        });
+    } else {
+      Toast("كلمة السر غير متطابقة");
+    }
+  };
   return (
     <div className={profile.profile}>
       <div className={profile.details}>
         <div className={profile.lottie}>
-          {" "}
           <Lottie
             loop
             animationData={identity}
@@ -47,6 +68,23 @@ function Profile({ user }) {
             </div>
           </div>
         </div>
+      </div>
+      <hr />
+      <div className={profile.change_pass}>
+        <h1>تغيير كلمة السر</h1>
+        <input
+          type="text"
+          placeholder="كلمة السر الجديدة"
+          value={newPass}
+          onChange={(e) => setNewPass(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="اعد كلمة السر الجديدة"
+          value={reNewPass}
+          onChange={(e) => setReNewPass(e.target.value)}
+        />
+        <button onClick={hanldeUpdatePass}>تغيير</button>
       </div>
     </div>
   );

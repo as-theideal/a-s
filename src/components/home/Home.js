@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import home from "./home.module.css";
 import HomePortfolio from "./HomePortfolio";
 import HomeServices from "./HomeServices";
@@ -82,7 +82,7 @@ function Home({ isLoggedIn }) {
               {homes[currPg]}
             </>
           ) : (
-            homes.map((e) => e)
+            homes.map((e, inn) => <Fragment key={inn}>{e}</Fragment>)
           )}
         </div>
       </div>

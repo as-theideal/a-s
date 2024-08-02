@@ -35,6 +35,34 @@
   width: 20px;
   height: 20px;
 }
+.change_pass {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.change_pass h1 {
+  color: var(--text-color);
+}
+.change_pass input {
+  border: none;
+  border-bottom: 1px solid var(--primary-color);
+  padding: 10px 15px 0;
+  font-size: 15px;
+  color: var(--text-color);
+  direction: ltr;
+}
+input:focus {
+  outline: none;
+}
+.change_pass button {
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: var(--normal-color);
+  border-radius: 20px;
+  border: none;
+  box-shadow: #333 0 5px 5px;
+}
 @media (max-width: 768px) {
   .profile .details {
     flex-direction: column;

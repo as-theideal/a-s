@@ -10,7 +10,6 @@ import LeftColTitle from "./left-col-title/LeftColTitle";
 function User({ isLoggedIn }) {
   const [user, setUser] = useState({});
   const [userId, setUserId] = useState("");
-  const [courses, setCourse] = useState([]);
   const [activeCom, setActiveCom] = useState("profile");
   useEffect(() => {
     const fetch = async () => {
@@ -27,9 +26,7 @@ function User({ isLoggedIn }) {
             .select("courses")
             .eq("id", data.user.id)
             .then(async (userDb) => {
-              if (userDb.data[0]) {
-                setCourse(userDb.data[0].courses);
-              } else if (userDb.error) {
+              if (userDb.error) {
                 Toast(userDb.error.message);
               } else {
                 await supabase
@@ -37,7 +34,6 @@ function User({ isLoggedIn }) {
                   .insert([
                     { email: data.user.user_metadata.email, courses: [] },
                   ]);
-                setCourse([]);
               }
             });
         } else {

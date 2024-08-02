@@ -21,12 +21,15 @@
   display: flex;
   position: relative;
   padding-top: 10px;
+  align-items: center;
+  width: 100%;
 }
 .form .inner div div {
   position: absolute;
   left: 10px;
   top: 50%;
   translate: 0 -50%;
+  width: fit-content;
 }
 .form .inner div div svg {
   width: 25px;
@@ -40,6 +43,8 @@ hr {
   background-color: var(--text-color);
 }
 .form input {
+  width: 100%;
+
   padding-top: 15px;
   border: none;
   outline: none;
