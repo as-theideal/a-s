@@ -66,15 +66,18 @@ function QuestionPanal({ data, courseId, elId, userId }) {
             Toast("حدث خطا ما");
             return;
           }
-          if (data[0].prevMcqs) {
+          if (data[0].prevMcqs.length) {
             let currentPrevMcq = data[0].prevMcqs.filter((prevMcq) => {
               return (
                 prevMcq.courseId === courseId.join("-") && prevMcq.elId === elId
               );
             });
-            if (currentPrevMcq) {
+            if (currentPrevMcq.length) {
+              console.log(currentPrevMcq);
               setActivePanal("prevAttempt");
               setFetchedPrevMcq(currentPrevMcq[0]);
+            } else {
+              setActivePanal("questions");
             }
           } else {
             setActivePanal("questions");
@@ -112,6 +115,28 @@ function QuestionPanal({ data, courseId, elId, userId }) {
               );
             });
             updatePrevUserData(newPrevMcqs, selectedAnswers);
+          } else {
+            await supabase
+              .from("users")
+              .update([
+                {
+                  prevMcqs: [
+                    {
+                      elId: elId,
+                      courseId: courseId.join("-"),
+                      selectedAnswer: selectedAnswers,
+                    },
+                  ],
+                },
+              ])
+              .eq("id", userId.join("-"))
+              .then(({ error }) => {
+                if (!error) {
+                  setActivePanal("result");
+                } else {
+                  Toast("حدث خطا ما");
+                }
+              });
           }
         } else {
           updatePrevUserData(data[0].prevMcqs, selectedAnswers);
