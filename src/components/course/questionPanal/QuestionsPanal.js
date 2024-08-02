@@ -167,6 +167,23 @@ function QuestionPanal({ data, courseId, elId, userId }) {
       ) : (
         activePanal === "questions" && (
           <>
+            <div className={questionsPanal.questions_indexs}>
+              {data.map((qu, inn) => {
+                return (
+                  <span
+                    onClick={() => setI(inn)}
+                    style={{
+                      backgroundColor: `${
+                        inn === i ? "var(--primary-color)" : "#eee"
+                      }`,
+                      color: `${inn !== i ? "var(--primary-color)" : "#eee"}`,
+                    }}
+                  >
+                    {inn + 1}
+                  </span>
+                );
+              })}
+            </div>
             <Question question={data[i]} inn={i + 1} length={data.length} />
             <div className={questionsPanal.bts}>
               {i > 0 && (
