@@ -267,14 +267,15 @@ function Form({ type, sendUserData }) {
                   كلمة السر :
                 </span>
               </div>
-              <button
+              <p
                 onClick={() => {
                   setForgetPass(true);
                   setWait(true);
                 }}
+                style={{ cursor: "pointer" }}
               >
                 نسيت كلمة السر
-              </button>
+              </p>
               <input
                 type="submit"
                 value={formType ? "التسجيل" : "تسجيل الدخول"}
