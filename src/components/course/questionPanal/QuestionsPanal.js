@@ -6,7 +6,7 @@ import supabase from "../../../Supabase";
 import Toast from "../../toast/Toast";
 import PrevAttempt from "./PrevAttempt";
 
-function QuestionPanal({ data, courseId, elId, userId }) {
+function QuestionPanal({ data, courseId, elId, userId, sectionId }) {
   const [questions] = useState(data);
   const [i, setI] = useState(0);
   const [activePanal, setActivePanal] = useState("");
@@ -28,6 +28,7 @@ function QuestionPanal({ data, courseId, elId, userId }) {
       {
         selectedAnswer: selectedAnswers,
         courseId: courseId.join("-"),
+        sectionId: sectionId,
         elId: elId,
       },
     ];
@@ -69,11 +70,12 @@ function QuestionPanal({ data, courseId, elId, userId }) {
           if (data[0].prevMcqs.length) {
             let currentPrevMcq = data[0].prevMcqs.filter((prevMcq) => {
               return (
-                prevMcq.courseId === courseId.join("-") && prevMcq.elId === elId
+                prevMcq.courseId === courseId.join("-") &&
+                prevMcq.elId === elId &&
+                prevMcq.elId === elId
               );
             });
             if (currentPrevMcq.length) {
-              console.log(currentPrevMcq);
               setActivePanal("prevAttempt");
               setFetchedPrevMcq(currentPrevMcq[0]);
             } else {
@@ -111,7 +113,9 @@ function QuestionPanal({ data, courseId, elId, userId }) {
           if (newAttempt) {
             let newPrevMcqs = data[0].prevMcqs.filter((prevMcq) => {
               return (
-                prevMcq.courseId !== courseId.join("-") && prevMcq.elId !== elId
+                prevMcq.courseId !== courseId.join("-") &&
+                prevMcq.elId !== elId &&
+                prevMcq.sectioId !== sectionId
               );
             });
             updatePrevUserData(newPrevMcqs, selectedAnswers);
@@ -122,6 +126,7 @@ function QuestionPanal({ data, courseId, elId, userId }) {
                 {
                   prevMcqs: [
                     {
+                      sectionId: sectionId,
                       elId: elId,
                       courseId: courseId.join("-"),
                       selectedAnswer: selectedAnswers,
@@ -161,6 +166,7 @@ function QuestionPanal({ data, courseId, elId, userId }) {
           questions={data}
           courseId={courseId}
           elId={elId}
+          sectionId={sectionId}
           showPrevAttemptResults={showPrevAttemptResults}
           prevAttemptAnswers={fetchedPrevMcq.selectedAnswer}
         />
@@ -171,6 +177,7 @@ function QuestionPanal({ data, courseId, elId, userId }) {
               {data.map((qu, inn) => {
                 return (
                   <span
+                    key={inn}
                     onClick={() => setI(inn)}
                     style={{
                       backgroundColor: `${

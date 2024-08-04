@@ -7,6 +7,7 @@ function Result({
   questions,
   courseId,
   elId,
+  sectionId,
   prevAttemptAnswers,
   showPrevAttemptResults,
 }) {
@@ -17,17 +18,16 @@ function Result({
     const fetchCorrectAnswers = async () => {
       await supabase
         .from(courseId.join("-"))
-        .select("correct_answers")
-        .eq("id", elId)
+        .select("content")
+        .eq("id", sectionId)
         .then(({ data, error }) => {
           if (error) {
             Toast("حدث خطا ما");
             return;
-          }
-          if (data[0]) {
-            setCorrectAnswers(data[0].correct_answers);
+          } else {
+            setCorrectAnswers(data[0].content[elId].correct_answers);
             // eslint-disable-next-line array-callback-return
-            data[0].correct_answers.map((correctAnswer, inn) => {
+            data[0].content[elId].correct_answers.map((correctAnswer, inn) => {
               if (showPrevAttemptResults) {
                 if (correctAnswer === prevAttemptAnswers[inn]) {
                   setCorrectSelecteion((prev) => prev + 1);
@@ -46,7 +46,14 @@ function Result({
         });
     };
     fetchCorrectAnswers();
-  }, [courseId, elId, prevAttemptAnswers, questions, showPrevAttemptResults]);
+  }, [
+    courseId,
+    elId,
+    prevAttemptAnswers,
+    questions,
+    sectionId,
+    showPrevAttemptResults,
+  ]);
   return (
     questions && (
       <div className={result.result_panal}>

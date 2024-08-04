@@ -7,8 +7,10 @@ import Toast from "../toast/Toast";
 function Admin() {
   const [authenticated, setAuthenticated] = useState(false);
   const [courses, setCourses] = useState([]);
+  const [coursesSections, setCoursesSections] = useState([]);
   const [activePanal, setActivePanal] = useState("");
   const [activeCourse, setActiveCourse] = useState("");
+  const [activeSection, setActiveSection] = useState("");
   const [correctAnswers, setCorrectANswers] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [questionsI, setQuestionsI] = useState(0);
@@ -20,6 +22,7 @@ function Admin() {
   const coursePriceToAdd = useRef();
   const courseYearToAdd = useRef();
   const courseImgToAdd = useRef();
+  const sectionTitleToAdd = useRef();
   const [newCourseId, setNewCourseId] = useState("");
   const [question, setQuestion] = useState("");
   const [answer1, setAnswer1] = useState("");
@@ -55,28 +58,120 @@ function Admin() {
         .select("*")
         .then(async ({ data }) => {
           setCourses(data);
+          data.map(async (course) => {
+            await supabase
+              .from(course.id)
+              .select("*")
+              .then(({ data, error }) => {
+                if (!error) {
+                  setCoursesSections((prev) =>
+                    prev ? [...prev, data] : [data]
+                  );
+                }
+              });
+          });
         });
     };
     if (!courses.length) {
       fetchCourses();
     }
-  }, [courses.length]);
-
+  }, [courses, courses.length]);
   const addVideo = async () => {
-    await supabase.from(activeCourse).insert([
-      {
-        title: videoTitleToAdd.current.value,
-        url: videoIdToAdd.current.value,
-        type: "video",
-      },
-    ]);
+    await supabase
+      .from(activeCourse)
+      .select("content")
+      .eq("id", activeSection)
+      .then(async ({ data, error }) => {
+        if (!error) {
+          await supabase
+            .from(activeCourse)
+            .update([
+              {
+                content: [
+                  ...data[0].content,
+                  {
+                    type: "video",
+                    url: videoIdToAdd.current.value,
+                    title: videoTitleToAdd.current.value,
+                  },
+                ],
+              },
+            ])
+            .eq("id", activeSection)
+            .then(({ error }) => {
+              if (!error) {
+                Toast("تم الاضافة");
+              }
+            });
+        }
+      });
   };
   const addFile = async () => {
+    await supabase
+      .from(activeCourse)
+      .select("content")
+      .eq("id", activeSection)
+      .then(async ({ data, error }) => {
+        if (!error) {
+          await supabase
+            .from(activeCourse)
+            .update([
+              {
+                content: [
+                  ...data[0].content,
+                  {
+                    type: "file",
+                    url: fileIdToAdd.current.value,
+                    title: fileTitleToAdd.current.value,
+                  },
+                ],
+              },
+            ])
+            .eq("id", activeSection)
+            .then(({ error }) => {
+              if (!error) {
+                Toast("تم الاضافة");
+              }
+            });
+        }
+      });
+  };
+  const addMcq = async () => {
+    if (correctAnswers.length === questions.length) {
+      await supabase
+        .from(activeCourse)
+        .select("content")
+        .eq("id", activeSection)
+        .then(async ({ data, error }) => {
+          if (!error) {
+            await supabase
+              .from(activeCourse)
+              .update([
+                {
+                  content: [
+                    ...data[0].content,
+                    {
+                      content: questions,
+                      type: "mcq",
+                      correct_answers: correctAnswers,
+                      title: mcqTitle.current.value,
+                    },
+                  ],
+                },
+              ])
+              .eq("id", activeSection);
+          }
+        });
+    } else {
+      Toast("اضغط على التالي قبل التسليم");
+    }
+  };
+
+  const addSection = async () => {
     await supabase.from(activeCourse).insert([
       {
-        title: fileTitleToAdd.current.value,
-        url: fileIdToAdd.current.value,
-        type: "file",
+        title: sectionTitleToAdd.current.value,
+        content: [],
       },
     ]);
   };
@@ -154,20 +249,7 @@ function Admin() {
       answers_name.map((answer, inn) => answer(""));
     }
   };
-  const addMcq = async () => {
-    if (correctAnswers.length === questions.length) {
-      await supabase.from(activeCourse).insert([
-        {
-          content: questions,
-          type: "mcq",
-          correct_answers: correctAnswers,
-          title: mcqTitle.current.value,
-        },
-      ]);
-    } else {
-      Toast("اضغط على التالي قبل التسليم");
-    }
-  };
+
   const addCourse = async () => {
     await supabase
       .from("courses_info")
@@ -182,7 +264,7 @@ function Admin() {
       .select("id")
       .then(({ data, error }) => setNewCourseId(data[0].id));
   };
-  if (authenticated) {
+  if (authenticated && courses.length && coursesSections.length) {
     return (
       <div className={admin.admin}>
         <div className={admin.add_element_active_panal}>
@@ -285,7 +367,13 @@ function Admin() {
               <div className={admin.add_mcq_bts}>
                 <button onClick={next}>التالي</button>
                 <button onClick={prev}>السابق</button>
-                <button onClick={addMcq}>تسليم</button>
+                <button
+                  onClick={() => {
+                    activeSection && addMcq();
+                  }}
+                >
+                  تسليم
+                </button>
               </div>
             </div>
           ) : activePanal === "addvideo" ? (
@@ -296,18 +384,40 @@ function Admin() {
                 ref={videoTitleToAdd}
                 placeholder="عنوان الفيديو"
               />
-              <button onClick={addVideo}>اضافة الفيديو</button>
+              <button
+                onClick={() => {
+                  activeSection && addVideo();
+                }}
+              >
+                اضافة الفيديو
+              </button>
+            </div>
+          ) : activePanal === "addfile" ? (
+            <div className={admin.add_file}>
+              <input type="text" ref={fileIdToAdd} placeholder="ايدي الملف" />
+              <input
+                type="text"
+                ref={fileTitleToAdd}
+                placeholder="عنوان الملف"
+              />
+              <button
+                onClick={() => {
+                  activeSection && addFile();
+                }}
+              >
+                اضافة الملف
+              </button>
             </div>
           ) : (
-            activePanal === "addfile" && (
-              <div className={admin.add_file}>
-                <input type="text" ref={fileIdToAdd} placeholder="ايدي الملف" />
+            activePanal === "add_section" && (
+              <div className={admin.add_section}>
                 <input
                   type="text"
-                  ref={fileTitleToAdd}
-                  placeholder="عنوان الملف"
+                  ref={sectionTitleToAdd}
+                  placeholder="عنوان القسم"
                 />
-                <button onClick={addFile}>اضافة الملف</button>
+
+                <button onClick={addSection}>اضافة قسم</button>
               </div>
             )
           )}
@@ -323,6 +433,37 @@ function Admin() {
                 />
                 <p>{course.title}</p>
                 <span>السنة الدراسية : {course.year}</span>
+                {coursesSections[inn] &&
+                  coursesSections[inn].map((section) => {
+                    return (
+                      <span
+                        key={section.id}
+                        onClick={() => {
+                          setActiveSection(section.id);
+                          setActiveCourse(course.id);
+                        }}
+                        style={{
+                          backgroundColor: `${
+                            course.id === activeCourse
+                              ? section.id === activeSection
+                                ? "var(--primary-color)"
+                                : "#eee"
+                              : "#eee"
+                          }`,
+                        }}
+                      >
+                        {section.title}
+                      </span>
+                    );
+                  })}
+                <span
+                  onClick={() => {
+                    setActivePanal("add_section");
+                    setActiveCourse(course.id);
+                  }}
+                >
+                  اضافة قسم
+                </span>
                 <div className={admin.spans}>
                   <span
                     onClick={() => {
