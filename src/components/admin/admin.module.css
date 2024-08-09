@@ -94,7 +94,11 @@
   justify-content: space-evenly;
   padding-bottom: 10px;
 }
-
+.faqs_list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 .faqs form {
   display: flex;
   flex-direction: column;

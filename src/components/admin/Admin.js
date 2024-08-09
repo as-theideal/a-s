@@ -600,7 +600,7 @@ function Admin() {
             <button onClick={() => setFaqsNav("answered")}>المجاب عليه</button>
           </div>
           {faqs && (
-            <div className={admin.faqs_list}>
+            <div className="faqs_list">
               {faqsNav === "all"
                 ? faqs.map((faq, inn) => (
                     <div

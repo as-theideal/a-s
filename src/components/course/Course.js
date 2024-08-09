@@ -223,17 +223,21 @@ function Course() {
             <div className="faqs" style={{ padding: 0 }}>
               <div className="faqs_list">
                 {faqs.length ? (
-                  faqs.map((faq, inn) => (
-                    <div key={inn} className="faq" id={courseStyle.faq}>
-                      <p style={{ width: "fit-content" }}>{faq.user_name}</p>
-                      <div>
-                        <p>س : {faq.question}</p>
-                        {faq.answer && (
-                          <p style={{ paddingRight: 25 }}>ا : {faq.answer}</p>
-                        )}
-                      </div>
-                    </div>
-                  ))
+                  faqs.map(
+                    (faq, inn) =>
+                      faq.answer && (
+                        <div key={inn} className="faq" id={courseStyle.faq}>
+                          <p style={{ width: "fit-content" }}>
+                            {faq.user_name}
+                          </p>
+                          <div>
+                            <p>س : {faq.question}</p>
+
+                            <p style={{ paddingRight: 25 }}>ا : {faq.answer}</p>
+                          </div>
+                        </div>
+                      )
+                  )
                 ) : (
                   <p>كن اول من يسأل</p>
                 )}
