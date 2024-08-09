@@ -16,6 +16,7 @@ function Admin() {
   const [correctAnswers, setCorrectANswers] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [questionsI, setQuestionsI] = useState(0);
+  const questionImg = useRef();
   const videoIdToAdd = useRef("");
   const videoTitleToAdd = useRef("");
   const fileIdToAdd = useRef("");
@@ -180,7 +181,19 @@ function Admin() {
       Toast("اضغط على التالي قبل التسليم");
     }
   };
-
+  const uploadFile = async () => {
+    await supabase.storage
+      .from("courses_questions_imgs")
+      .upload(`${Math.random()}`, questionImg.current.files[0])
+      .then(({ data, error }) => {
+        if (error) {
+          Toast(error.message);
+          return;
+        }
+        Toast("تم الرفع");
+        setQuestion(data.path);
+      });
+  };
   const addSection = async () => {
     await supabase.from(activeCourse).insert([
       {
@@ -240,6 +253,7 @@ function Admin() {
     } else {
       setQuestion("");
       answers_name.map((answer, inn) => answer(""));
+      questionImg.current.value = "";
     }
   };
   const addCorrectAnswer = (e) => {
@@ -311,7 +325,7 @@ function Admin() {
           {activePanal === "addmcq" ? (
             <div className={admin.add_mcq}>
               <input ref={mcqTitle} type="text" placeholder="العنوان" />
-
+              <input type="file" ref={questionImg} onChange={uploadFile} />
               <div className={admin.add_mcq_inputs} id="add_mcq_inputs">
                 <input
                   type="text"

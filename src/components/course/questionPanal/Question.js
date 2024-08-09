@@ -17,9 +17,16 @@ function Question({ question, inn, length }) {
       <span className={questionStyle.length}>
         {length}/{inn}
       </span>
-      <h1>
-        {inn} : {question.question}
-      </h1>
+      {+question.question ? (
+        <img
+          src={`https://sqbvwnxsbocvrdxbpsfu.supabase.co/storage/v1/object/public/courses_questions_imgs/${question.question}`}
+          alt=""
+        />
+      ) : (
+        <h1>
+          {inn} : {question.question}
+        </h1>
+      )}
       <div className={questionStyle.answers}>
         {question.answers.map((answer, inn) => {
           return (
