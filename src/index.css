@@ -109,8 +109,7 @@ img {
   display: flex;
   flex-direction: column;
   box-shadow: #333 0 2px 2px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-radius: 20px;
   padding: 10px 20px;
   gap: 30px;
   background-color: #fff;
@@ -129,6 +128,102 @@ img {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  animation-duration: 0.2s;
+  animation-fill-mode: forwards;
+  animation-name: hide_section;
+}
+.faqs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 30px;
+  border-radius: 20px;
+  margin-bottom: 50px;
+}
+
+.faqs_list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 500px;
+  overflow-y: scroll;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.faq {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: #000 0 2px 5px;
+  border-radius: 20px;
+  padding: 10px;
+  box-sizing: border-box;
+  position: relative;
+}
+.faq span:first-of-type,
+.faq button {
+  position: absolute;
+  left: 20px;
+  background-color: red;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  color: var(--normal-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.faq span:first-of-type {
+  top: 10px;
+}
+.faq button {
+  bottom: 10px;
+  padding: 10px !important;
+  border-radius: 5px !important;
+}
+.faq p {
+  width: 100%;
+  color: var(--primary-color);
+  word-wrap: break-word;
+}
+.faq p:nth-of-type(2) {
+  color: var(--secondary-color);
+}
+.faqs textarea {
+  width: 100%;
+  border: 1px solid var(--primary-color);
+}
+@keyframes show_section {
+  from {
+    transform: scaleY(0);
+    opacity: 0;
+    display: none;
+  }
+  to {
+    transform: scaleY(1);
+    display: flex;
+    opacity: 1;
+  }
+}
+@keyframes hide_section {
+  to {
+    opacity: 0;
+    display: none;
+  }
+  from {
+    opacity: 1;
+    display: flex;
+  }
 }
 @keyframes show {
   0% {

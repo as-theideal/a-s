@@ -29,7 +29,6 @@
   border-radius: 10px;
   font-size: 17px;
   padding: 5px 15px;
-  width: 100%;
 }
 .add_mcq_inputs div span {
   width: 20px;
@@ -81,6 +80,22 @@
   width: 50px;
 }
 .add_course {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.faqs .faqs_nav {
+  width: 100%;
+  gap: 10px;
+  border-bottom: 1px solid var(--primary-color);
+  border-radius: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  padding-bottom: 10px;
+}
+
+.faqs form {
   display: flex;
   flex-direction: column;
   gap: 10px;

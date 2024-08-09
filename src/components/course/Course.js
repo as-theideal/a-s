@@ -15,6 +15,9 @@ function Course() {
   const [sectionId, setSectionId] = useState();
   const [courseId, setCourseId] = useState("");
   const [userId, setUserId] = useState("");
+  const [userName, setUserName] = useState("");
+  const [faqToAdd, setfaqToAdd] = useState("");
+  const [faqs, setfaqs] = useState([]);
 
   useEffect(() => {
     const fetchCourse = async (courseId) => {
@@ -30,12 +33,28 @@ function Course() {
           }
         });
     };
+    const fetchFaqs = async (courseId) => {
+      await supabase
+        .from("faqs")
+        .select("*")
+        .eq("course_id", courseId)
+        .then(({ data, error }) => {
+          if (error) {
+            Toast(error.message);
+            return;
+          }
+          if (data) {
+            setfaqs(data);
+          }
+        });
+    };
     supabase.auth.getUser().then(async (userData) => {
       if (userData.error) {
         Toast(userData.error.message);
         return;
       }
       if (userData.data) {
+        setUserName(userData.data.user.user_metadata.name.split(" ")[0]);
         setUserId(userData.data.user.id.split("-"));
         await supabase
           .from("courses_info")
@@ -62,6 +81,7 @@ function Course() {
                       if (courseId === data[0].id) {
                         fetchCourse(data[0].id);
                         setCourseId(data[0].id.split("-"));
+                        fetchFaqs(data[0].id);
                       }
                     });
                   }
@@ -71,19 +91,45 @@ function Course() {
       }
     });
   }, [courseurlFromLink]);
+
   const handleShowSectionContent = (sectionInn) => {
     document.querySelectorAll(".section")[
       sectionInn
-    ].children[1].style.display = `${
+    ].children[1].style.animationName = `${
       document.querySelectorAll(".section")[sectionInn].children[1].style
-        .display === "none"
-        ? "flex"
-        : "none"
+        .animationName === "show_section"
+        ? "hide_section"
+        : "show_section"
     }`;
     setActiveSection(sectionInn);
     if (activePanal) {
       setActivePanal(null);
     }
+  };
+  const handleAddFaq = () => {
+    if (!faqToAdd) {
+      Toast("لا تنسى كتابة السؤال");
+      return;
+    }
+
+    supabase
+      .from("faqs")
+      .insert([
+        {
+          course_id: courseId.join("-"),
+          question: faqToAdd,
+          user_name: userName,
+        },
+      ])
+      .select()
+      .then(({ data, error }) => {
+        if (error) {
+          Toast(error.message);
+          return;
+        }
+        setfaqs([...faqs, data[0]]);
+        setfaqToAdd("");
+      });
   };
   return (
     data.length && (
@@ -112,19 +158,15 @@ function Course() {
             <div className={courseStyle.elements}>
               {data.map((section, sectionInn) => {
                 return (
-                  <div
-                    key={sectionInn}
-                    className="section"
-                    onClick={() => handleShowSectionContent(sectionInn)}
-                  >
-                    <div className="section_header">
+                  <div key={sectionInn} className="section">
+                    <div
+                      className="section_header"
+                      onClick={() => handleShowSectionContent(sectionInn)}
+                    >
                       <p>{section.title}</p>
                       <span></span>
                     </div>
-                    <div
-                      className="section_content"
-                      style={{ display: "none" }}
-                    >
+                    <div className="section_content">
                       {section.content.map((el, inn) => {
                         return (
                           <div
@@ -177,6 +219,34 @@ function Course() {
                   </div>
                 );
               })}
+            </div>
+            <div className="faqs" style={{ padding: 0 }}>
+              <div className="faqs_list">
+                {faqs.length ? (
+                  faqs.map((faq, inn) => (
+                    <div key={inn} className="faq" id={courseStyle.faq}>
+                      <p style={{ width: "fit-content" }}>{faq.user_name}</p>
+                      <div>
+                        <p>س : {faq.question}</p>
+                        {faq.answer && (
+                          <p style={{ paddingRight: 25 }}>ا : {faq.answer}</p>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p>كن اول من يسأل</p>
+                )}
+              </div>
+              <hr />
+              <textarea
+                value={faqToAdd}
+                onChange={(e) => setfaqToAdd(e.target.value)}
+                placeholder="اكتب سؤالك : "
+              />
+              <button onClick={handleAddFaq} className="primary_bt">
+                اضافة سؤال
+              </button>
             </div>
           </div>
         </div>

@@ -159,3 +159,40 @@ p {
   display: flex;
   justify-content: space-evenly;
 }
+
+.inner textarea {
+  padding: 10px 20px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+#faq {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  box-shadow: none;
+  background-color: transparent;
+  gap: 20px;
+}
+#faq div {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background-color: #fff;
+  /* box-shadow: #000 0 3px 5px; */
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border-top-right-radius: 0;
+}
+#faq div:first-of-type::after {
+  content: "";
+  width: 9px;
+  height: 12px;
+  border-top: 12px solid #fff;
+  border-right: 12px solid #fff;
+  transform: rotateZ(45deg);
+  top: 5px;
+  right: -10px;
+  position: absolute;
+}

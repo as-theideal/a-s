@@ -6,7 +6,9 @@ import Toast from "../toast/Toast";
 
 function Admin() {
   const [authenticated, setAuthenticated] = useState(false);
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState();
+  const [faqs, setFaqs] = useState();
+  const [faqsNav, setFaqsNav] = useState("all");
   const [coursesSections, setCoursesSections] = useState([]);
   const [activePanal, setActivePanal] = useState("");
   const [activeCourse, setActiveCourse] = useState("");
@@ -72,10 +74,22 @@ function Admin() {
           });
         });
     };
-    if (!courses.length) {
+    const fetchFaqs = async () => {
+      await supabase
+        .from("faqs")
+        .select("*")
+        .then(async ({ data }) => {
+          setFaqs(data);
+        });
+    };
+    if (!courses) {
       fetchCourses();
     }
-  }, [courses, courses.length]);
+    if (!faqs) {
+      fetchFaqs();
+    }
+  }, [courses, faqs]);
+
   const addVideo = async () => {
     await supabase
       .from(activeCourse)
@@ -264,7 +278,33 @@ function Admin() {
       .select("id")
       .then(({ data, error }) => setNewCourseId(data[0].id));
   };
-  if (authenticated && courses.length && coursesSections.length) {
+  const handleAnswerAFaq = async (e, faq_id, inn) => {
+      e.preventDefault();
+      await supabase
+        .from("faqs")
+        .update([
+          { answer: document.querySelectorAll(".faq input")[inn].value },
+        ])
+        .eq("id", faq_id)
+        .then(({ data, error }) => !error && setFaqs(data));
+    },
+    handleShowUpdateAnswerForm = (inx) => {
+      document.querySelectorAll(".update_answer_form").forEach((form, inn) => {
+        form.style.display = inn === inx ? "flex" : "none";
+      });
+    },
+    deleteFaq = async (id) => {
+      await supabase
+        .from("faqs")
+        .delete()
+        .eq("id", id)
+        .select()
+        .then(
+          ({ data, error }) =>
+            !error && setFaqs(faqs.filter((faq) => faq.id !== data[0].id))
+        );
+    };
+  if (authenticated && coursesSections && courses) {
     return (
       <div className={admin.admin}>
         <div className={admin.add_element_active_panal}>
@@ -551,6 +591,95 @@ function Admin() {
             <button onClick={addCourse}>اضف الكورس</button>
           </div>
         )}
+        <hr />
+        <div className={admin.faqs}>
+          <div className={admin.faqs_nav}>
+            <button onClick={() => setFaqsNav("unanswered")}>
+              غير المجاب عليه
+            </button>
+            <button onClick={() => setFaqsNav("answered")}>المجاب عليه</button>
+          </div>
+          {faqs && (
+            <div className={admin.faqs_list}>
+              {faqsNav === "all"
+                ? faqs.map((faq, inn) => (
+                    <div
+                      key={inn}
+                      className="faq"
+                      style={{ paddingLeft: `${faq.answer && "40px"}` }}
+                    >
+                      <span onDoubleClick={() => deleteFaq(faq.id)}>x</span>
+                      <p>س : {faq.question}</p>
+
+                      {!faq.answer ? (
+                        <form
+                          onSubmit={(e) => handleAnswerAFaq(e, faq.id, inn)}
+                        >
+                          <input type="text" placeholder="الاجابة : " />
+                          <input type="submit" value="ارسال" />
+                        </form>
+                      ) : (
+                        <>
+                          <p>ا : {faq.answer}</p>
+                          <button
+                            onClick={() => handleShowUpdateAnswerForm(inn)}
+                          >
+                            E
+                          </button>
+                          <form
+                            style={{ display: "none" }}
+                            onSubmit={(e) => handleAnswerAFaq(e, faq.id, inn)}
+                            className="update_answer_form"
+                          >
+                            <input type="text" placeholder="الاجابة : " />
+                            <input type="submit" value="ارسال" />
+                          </form>
+                        </>
+                      )}
+                    </div>
+                  ))
+                : faqsNav === "answered"
+                ? faqs
+                    .filter((faq) => faq.answer)
+                    .map((faq, inn) => (
+                      <div
+                        key={inn}
+                        className="faq"
+                        style={{ paddingLeft: `${faq.answer && "40px"}` }}
+                      >
+                        <span onDoubleClick={() => deleteFaq(faq.id)}>x</span>
+                        <p>س : {faq.question}</p>
+                        <p>ا : {faq.answer}</p>
+                        <button onClick={() => handleShowUpdateAnswerForm(inn)}>
+                          E
+                        </button>
+                        <form
+                          style={{ display: "none" }}
+                          onSubmit={(e) => handleAnswerAFaq(e, faq.id, inn)}
+                          className="update_answer_form"
+                        >
+                          <input type="text" placeholder="الاجابة : " />
+                          <input type="submit" value="ارسال" />
+                        </form>
+                      </div>
+                    ))
+                : faqs
+                    .filter((faq) => !faq.answer)
+                    .map((faq, inn) => (
+                      <div key={inn} className="faq">
+                        <span onDoubleClick={() => deleteFaq(faq.id)}>x</span>
+                        <p>س : {faq.question}</p>
+                        <form
+                          onSubmit={(e) => handleAnswerAFaq(e, faq.id, inn)}
+                        >
+                          <input type="text" placeholder="الاجابة : " />
+                          <input type="submit" value="ارسال" />
+                        </form>
+                      </div>
+                    ))}
+            </div>
+          )}
+        </div>
       </div>
     );
   }
