@@ -79,7 +79,7 @@ function User({ isLoggedIn }) {
                         .from("courses_info")
                         .select("title,id")
                         .then((infos) => {
-                          data.map((el) => {
+                          data.map((el) =>
                             setFaqs((prev) => {
                               return [
                                 {
@@ -92,8 +92,8 @@ function User({ isLoggedIn }) {
                                 },
                                 ...prev,
                               ];
-                            });
-                          });
+                            })
+                          );
                         });
                     }
                   });

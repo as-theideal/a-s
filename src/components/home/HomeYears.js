@@ -8,7 +8,6 @@ import second from "../../assets/icons8-medal-second-place-50 (1).svg";
 import third from "../../assets/icons8-medal-third-place-50 (1).svg";
 import wats from "../../assets/waQrCode.png";
 import fb from "../../assets/fb_qr.svg";
-import phone from "../../assets/phone.svg";
 import { ReactSVG } from "react-svg";
 
 function HomeYears() {
