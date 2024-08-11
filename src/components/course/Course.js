@@ -119,6 +119,7 @@ function Course() {
           course_id: courseId.join("-"),
           question: faqToAdd,
           user_name: userName,
+          user_id: userId.join("-"),
         },
       ])
       .select()

@@ -8,7 +8,9 @@ import Toast from "../../toast/Toast";
 function Profile({ user }) {
   const [newPass, setNewPass] = useState("");
   const [reNewPass, setReNewPass] = useState("");
+  const [wait, setWait] = useState(false);
   const hanldeUpdatePass = async () => {
+    setWait(true);
     if (newPass === reNewPass) {
       await supabase.auth
         .updateUser({
@@ -25,6 +27,7 @@ function Profile({ user }) {
     } else {
       Toast("كلمة السر غير متطابقة");
     }
+    setWait(false);
   };
   return (
     <div className={profile.profile}>
@@ -84,7 +87,15 @@ function Profile({ user }) {
           value={reNewPass}
           onChange={(e) => setReNewPass(e.target.value)}
         />
-        <button onClick={hanldeUpdatePass}>تغيير</button>
+        <button
+          onClick={hanldeUpdatePass}
+          style={{
+            pointerEvents: `${wait ? "none" : "all"}`,
+            opacity: `${wait ? 0.5 : 1}`,
+          }}
+        >
+          تغيير
+        </button>
       </div>
     </div>
   );

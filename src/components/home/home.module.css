@@ -170,13 +170,6 @@
   text-transform: uppercase;
   font-family: "second_font";
 }
-.portfolio .portfolio_img {
-  height: 80%;
-  width: 90%;
-}
-.portfolio_img img {
-  height: 100%;
-}
 
 .services {
   flex: 1;

@@ -1,29 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import supabase from "../../../Supabase";
 import payments from "./payments.module.css";
 import Toast from "../../toast/Toast";
 
-function Payments({ userId }) {
-  const [invoices, setInvoices] = useState([]);
-  const [wait ,setWait]= useState(false)
-  useEffect(() => {
-    const fetchInvoices = async () => {
-      await supabase
-        .from("invoices")
-        .select("course_id,state,expire_date,fawry_code,invoice_id,invoice_key")
-        .eq("user_id", userId)
-        .then(({ data, error }) => {
-          if (error) {
-            Toast("حدث خطا ما");
-            return;
-          }
-          if (data) {
-            setInvoices(data.reverse());
-          }
-        });
-    };
-    fetchInvoices();
-  }, [setInvoices, userId]);
+function Payments({ invoices }) {
+  const [wait, setWait] = useState(false);
 
   const checkInvoice = async (invoice_id) => {
     const go = async () => {
@@ -48,30 +29,32 @@ function Payments({ userId }) {
                   .select("course_id,state,invoice_id")
                   .eq("user_id", user.data.user.id)
                   .then(async (invoices) => {
-                    invoices.data.map(async(invoice , inn) =>{
-                      if(invoice.invoice_id === invoice_id && !invoice.state){
+                    invoices.data.map(async (invoice, inn) => {
+                      if (invoice.invoice_id === invoice_id && !invoice.state) {
                         await supabase
-                        .from("users")
-                        .update({
-                          courses: [
-                            ...data[0].courses,
-                            invoices.data[inn].course_id,
-                          ],
-                        })
-                        .eq("id", user.data.user.id);
+                          .from("users")
+                          .update({
+                            courses: [
+                              ...data[0].courses,
+                              invoices.data[inn].course_id,
+                            ],
+                          })
+                          .eq("id", user.data.user.id);
                         await supabase
-                        .from("invoices")
-                        .update({ state: true })
-                        .eq("invoice_id", invoice_id)
-                        .then(Toast("تم تفعيل الكورس"));
-                      }else{Toast("تم تفعيل الكورس مسبقا");}
-                    })
+                          .from("invoices")
+                          .update({ state: true })
+                          .eq("invoice_id", invoice_id)
+                          .then(Toast("تم تفعيل الكورس"));
+                      } else {
+                        Toast("تم تفعيل الكورس مسبقا");
+                      }
+                    });
                   });
               }
             });
         }
       });
-      setWait(false)
+      setWait(false);
     };
     await fetch(
       `https://app.fawaterk.com/api/v2/getInvoiceData/${invoice_id}`,
@@ -84,9 +67,9 @@ function Payments({ userId }) {
         },
       }
     ).then(async (res) => {
-       const resData =await res.json().then(data=>data);
-       if (resData.status === "success") {
-         if (resData.data.status_text === "paid") {
+      const resData = await res.json().then((data) => data);
+      if (resData.status === "success") {
+        if (resData.data.status_text === "paid") {
           go(resData.data.invoice_id);
         } else {
           Toast("لم يتم الفع");
@@ -113,8 +96,16 @@ function Payments({ userId }) {
                 textDecorationLine: `${
                   invoice.state ? "line-through" : "none"
                 }`,
-                pointerEvents: `${invoice.state? "none" : wait ? "none" : !invoice.state ? "all" : !wait && "none"}`,
-                opacity: `${wait? 0.5 : 1}`,
+                pointerEvents: `${
+                  invoice.state
+                    ? "none"
+                    : wait
+                    ? "none"
+                    : !invoice.state
+                    ? "all"
+                    : !wait && "none"
+                }`,
+                opacity: `${wait ? 0.5 : 1}`,
               }}
             >
               <button
@@ -124,7 +115,12 @@ function Payments({ userId }) {
               >
                 ادفع
               </button>
-              <button onClick={() => {checkInvoice(invoice.invoice_id); setWait(true)}}>
+              <button
+                onClick={() => {
+                  checkInvoice(invoice.invoice_id);
+                  setWait(true);
+                }}
+              >
                 لقد دفعت
               </button>
               <span>{new Date(invoice.expire_date).toLocaleString()}</span>

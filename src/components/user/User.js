@@ -6,14 +6,19 @@ import Profile from "./profile/Profile";
 import Courses from "./courses/CoursesPanal";
 import Payments from "./payments/Payments";
 import LeftColTitle from "./left-col-title/LeftColTitle";
+import Faqs from "./faqs/Faqs";
 
 function User({ isLoggedIn }) {
   const [user, setUser] = useState({});
   const [userId, setUserId] = useState("");
   const [activeCom, setActiveCom] = useState("profile");
+  const [courses, setcourses] = useState([]);
+  const [invoices, setInvoices] = useState([]);
+  const [faqs, setFaqs] = useState([]);
+
   useEffect(() => {
-    const fetch = async () => {
-      await supabase.auth.getUser().then(async ({ data }) => {
+    const fetch = () => {
+      supabase.auth.getUser().then(async ({ data }) => {
         if (!data.user) {
           setUser({});
           return;
@@ -28,12 +33,77 @@ function User({ isLoggedIn }) {
             .then(async (userDb) => {
               if (userDb.error) {
                 Toast(userDb.error.message);
+              } else if (userDb.data.length) {
+                if (userDb.data[0].courses) {
+                  userDb.data[0].courses.map(async (courseId) => {
+                    supabase
+                      .from("courses_info")
+                      .select("*")
+                      .eq("id", courseId)
+                      .then(({ data, error }) => {
+                        if (data) {
+                          setcourses((prev) =>
+                            prev ? [...prev, data[0]] : [data[0]]
+                          );
+                        }
+                        if (error) {
+                          Toast(error.message);
+                        }
+                      });
+                  });
+                }
+                supabase
+                  .from("invoices")
+                  .select(
+                    "course_id,state,expire_date,fawry_code,invoice_id,invoice_key"
+                  )
+                  .eq("user_id", data.user.id)
+                  .then(({ data, error }) => {
+                    if (error) {
+                      Toast("حدث خطا ما");
+                      return;
+                    }
+                    if (data) {
+                      setInvoices(data.reverse());
+                    }
+                  });
+                supabase
+                  .from("faqs")
+                  .select("question,answer,course_id")
+                  .eq("user_id", data.user.id)
+                  .then(({ data, error }) => {
+                    if (error) {
+                      Toast(error.message);
+                    } else if (data.length) {
+                      supabase
+                        .from("courses_info")
+                        .select("title,id")
+                        .then((infos) => {
+                          data.map((el) => {
+                            setFaqs((prev) => {
+                              return [
+                                {
+                                  question: el.question,
+                                  answer: el.answer,
+                                  course_title: infos.data.map(
+                                    (ele) =>
+                                      ele.id === el.course_id && ele.title
+                                  )[0],
+                                },
+                                ...prev,
+                              ];
+                            });
+                          });
+                        });
+                    }
+                  });
               } else {
                 await supabase
                   .from("users")
                   .insert([
                     { email: data.user.user_metadata.email, courses: [] },
-                  ]);
+                  ])
+                  .then((data) => console.log(data));
               }
             });
         } else {
@@ -66,6 +136,12 @@ function User({ isLoggedIn }) {
                 كورساتي
               </button>
               <button
+                onClick={() => setActiveCom("faqs")}
+                className={activeCom === "faqs" ? userStyle.active : ""}
+              >
+                اسئلتي
+              </button>
+              <button
                 onClick={() => setActiveCom("payments")}
                 className={activeCom === "payments" ? userStyle.active : ""}
               >
@@ -79,6 +155,8 @@ function User({ isLoggedIn }) {
                     ? "ملفي الشخصي"
                     : activeCom === "courses"
                     ? "كورساتي"
+                    : activeCom === "faqs"
+                    ? "اسئلتي"
                     : "فواتيري"
                 }
               />
@@ -86,9 +164,11 @@ function User({ isLoggedIn }) {
               {activeCom === "profile" ? (
                 <Profile user={user} />
               ) : activeCom === "courses" ? (
-                <Courses userId={userId} user={user} />
+                <Courses courses={courses} />
+              ) : activeCom === "faqs" ? (
+                <Faqs faqs={faqs} />
               ) : (
-                <Payments userId={userId} />
+                <Payments userId={userId} invoices={invoices} />
               )}
             </div>
           </div>

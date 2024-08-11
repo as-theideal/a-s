@@ -5,17 +5,40 @@ import admin from "./admin.module.css";
 import Toast from "../toast/Toast";
 
 function Admin() {
+  // State to track if the user is authenticated
   const [authenticated, setAuthenticated] = useState(false);
+
+  // State to hold the list of courses
   const [courses, setCourses] = useState();
+
+  // State to hold the list of FAQs
   const [faqs, setFaqs] = useState();
+
+  // State to manage the navigation between different FAQ views (e.g., all, answered, unanswered)
   const [faqsNav, setFaqsNav] = useState("all");
+
+  // State to hold sections for each course
   const [coursesSections, setCoursesSections] = useState([]);
+
+  // State to track the currently active panel in the admin interface
   const [activePanal, setActivePanal] = useState("");
+
+  // State to track the currently active course
   const [activeCourse, setActiveCourse] = useState("");
+
+  // State to track the currently active section within a course
   const [activeSection, setActiveSection] = useState("");
+
+  // State to hold correct answers for questions
   const [correctAnswers, setCorrectANswers] = useState([]);
+
+  // State to hold questions for the MCQ (multiple-choice questions)
   const [questions, setQuestions] = useState([]);
+
+  // State to track the index of the current question being edited or viewed
   const [questionsI, setQuestionsI] = useState(0);
+
+  // Refs to hold references to various input elements
   const questionImg = useRef();
   const videoIdToAdd = useRef("");
   const videoTitleToAdd = useRef("");
@@ -26,16 +49,27 @@ function Admin() {
   const courseYearToAdd = useRef();
   const courseImgToAdd = useRef();
   const sectionTitleToAdd = useRef();
+
+  // State to hold the ID of the newly created course
   const [newCourseId, setNewCourseId] = useState("");
+
+  // State to hold the question text for MCQs
   const [question, setQuestion] = useState("");
+
+  // States to hold answers for the MCQ options
   const [answer1, setAnswer1] = useState("");
   const [answer2, setAnswer2] = useState("");
   const [answer3, setAnswer3] = useState("");
   const [answer4, setAnswer4] = useState("");
-  const mcqTitle = useRef("");
-  const answers_name = [setAnswer1, setAnswer2, setAnswer3, setAnswer4];
-  const nav = useNavigate();
 
+  // Ref to hold the title of the MCQ
+  const mcqTitle = useRef("");
+
+  // Array of functions to set answers (for easier management)
+  const answers_name = [setAnswer1, setAnswer2, setAnswer3, setAnswer4];
+
+  // Navigation hook for programmatic navigation
+  const nav = useNavigate();
   const authenticate = async () => {
     await supabase.auth.getUser().then((data) => {
       if (data.data.user) {
