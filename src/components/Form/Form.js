@@ -46,11 +46,11 @@ function Form({ type, sendUserData }) {
         }
       });
   };
-  const insertDeviceId = () => {
+  const insertDeviceId = async () => {
     let devicesId = `${
       window.navigator.userAgent
     }-${Math.random().toString()}-${window.navigator.userAgentData.mobile}`;
-    supabase
+    await supabase
       .from("devices")
       .insert([{ email: email, devices: [devicesId] }])
       .then(() => localStorage.setItem("deviceId", devicesId));
@@ -61,7 +61,12 @@ function Form({ type, sendUserData }) {
     }-${Math.random().toString()}-${window.navigator.userAgentData.mobile}`;
     supabase
       .from("devices")
-      .update([{ email: email, devices: [preDeviceId, devicesId] }])
+      .update([
+        {
+          email: email,
+          devices: preDeviceId ? [preDeviceId, devicesId] : [devicesId],
+        },
+      ])
       .eq("email", email)
       .then(() => localStorage.setItem("deviceId", devicesId));
   };
@@ -126,6 +131,10 @@ function Form({ type, sendUserData }) {
               insertDeviceId();
               auth();
               return;
+            }
+            if (data[0].devices.length === 0) {
+              updateDeviceId();
+              auth();
             }
             if (data[0].falseAttempts > 0) {
               if (data[0].devices.length === 1) {
