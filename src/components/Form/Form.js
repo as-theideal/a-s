@@ -26,6 +26,45 @@ function Form({ type, sendUserData }) {
     await supabase.auth.resetPasswordForEmail(email);
     setWait(false);
   };
+  const auth = async () => {
+    await supabase.auth
+      .signInWithPassword({
+        email: email,
+        password: pass,
+      })
+      .then((data) => {
+        if (data.data.user) {
+          sendUserData();
+          setWait(false);
+          reset();
+          setWait(false);
+          nav("/user");
+          window.location.reload();
+        } else {
+          Toast(data.error.message);
+          setWait(false);
+        }
+      });
+  };
+  const insertDeviceId = () => {
+    let devicesId = `${
+      window.navigator.userAgent
+    }-${Math.random().toString()}-${window.navigator.userAgentData.mobile}`;
+    supabase
+      .from("devices")
+      .insert([{ email: email, devices: [devicesId] }])
+      .then(() => localStorage.setItem("deviceId", devicesId));
+  };
+  const updateDeviceId = (preDeviceId) => {
+    let devicesId = `${
+      window.navigator.userAgent
+    }-${Math.random().toString()}-${window.navigator.userAgentData.mobile}`;
+    supabase
+      .from("devices")
+      .update([{ email: email, devices: [preDeviceId, devicesId] }])
+      .eq("email", email)
+      .then(() => localStorage.setItem("deviceId", devicesId));
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setWait(true);
@@ -50,7 +89,7 @@ function Form({ type, sendUserData }) {
         });
     } else {
       if (formType) {
-        await supabase.auth
+        supabase.auth
           .signUp({
             email: email,
             password: pass,
@@ -71,24 +110,73 @@ function Form({ type, sendUserData }) {
               Toast(data.error.message);
             }
           });
+        insertDeviceId();
       } else {
-        await supabase.auth
-          .signInWithPassword({
-            email: email,
-            password: pass,
-          })
-          .then((data) => {
-            if (data.data.user) {
-              sendUserData();
+        supabase
+          .from("devices")
+          .select("*")
+          .eq("email", email)
+          .then(({ data, error }) => {
+            if (error) {
+              Toast(error.message);
               setWait(false);
-              reset();
-              setWait(false);
-              nav("/user");
-              window.location.reload();
-              Toast("تم تسجيل الدخول");
+              return;
+            }
+            if (data.length === 0) {
+              insertDeviceId();
+              auth();
+              return;
+            }
+            if (data[0].falseAttempts > 0) {
+              if (data[0].devices.length === 1) {
+                if (data[0].devices[0] === localStorage.getItem("deviceId")) {
+                  auth();
+                } else {
+                  if (data[0].devices.length < 2) {
+                    updateDeviceId(data[0].devices[0]);
+                    auth();
+                  } else {
+                    supabase
+                      .from("devices")
+                      .update("falseAttempts", data[0].falseAttempts - 1)
+                      .eq("email", email)
+                      .then(
+                        Toast("لقد تجاوزت الحد الاقصى للعدد الاجهزة المسموحة")
+                      );
+                  }
+                }
+              } else if (data[0].devices.length > 1) {
+                let x = data[0].devices.some((id) => {
+                  return id === localStorage.getItem("deviceId");
+                });
+                if (x) {
+                  auth();
+                } else {
+                  supabase
+                    .from("devices")
+                    .update([{ falseAttempts: data[0].falseAttempts - 1 }])
+                    .eq("email", email)
+                    .select()
+                    .then(({ data }) => {
+                      Toast("لقد تجاوزت الحد الاقصى للعدد الاجهزة المسموحة");
+                      setTimeout(
+                        () =>
+                          Toast(
+                            `${
+                              data[0].falseAttempts
+                                ? `عدد المحاولات المتبقية : ${data[0].falseAttempts}`
+                                : "تم حظر حسابك تواصل مع الدعم"
+                            }`
+                          ),
+                        7000
+                      );
+                    });
+                  setWait(false);
+                  reset();
+                }
+              }
             } else {
-              Toast(data.error.message);
-              setWait(false);
+              Toast("تم حظر حسابك تواصل مع الدعم");
             }
           });
       }
