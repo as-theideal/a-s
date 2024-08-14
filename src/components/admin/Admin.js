@@ -19,6 +19,8 @@ function Admin() {
 
   // State to hold sections for each course
   const [coursesSections, setCoursesSections] = useState([]);
+  // State to hold banned for each course
+  const [banned, setBanned] = useState();
 
   // State to track the currently active panel in the admin interface
   const [activePanal, setActivePanal] = useState("");
@@ -109,6 +111,15 @@ function Admin() {
           });
         });
     };
+    const fetchBanned = async () => {
+      await supabase
+        .from("devices")
+        .select("*")
+        .eq("falseAttempts", 0)
+        .then(async ({ data }) => {
+          data && setBanned(data);
+        });
+    };
     const fetchFaqs = async () => {
       await supabase
         .from("faqs")
@@ -123,7 +134,10 @@ function Admin() {
     if (!faqs) {
       fetchFaqs();
     }
-  }, [courses, faqs]);
+    if (!banned) {
+      fetchBanned();
+    }
+  }, [banned, courses, faqs]);
 
   const addVideo = async () => {
     await supabase
@@ -352,6 +366,17 @@ function Admin() {
             !error && setFaqs(faqs.filter((faq) => faq.id !== data[0].id))
         );
     };
+  const unbanUser = (id) => {
+    Toast("تم فك الحظر");
+    // supabase
+    //   .from("devices")
+    //   .update([{ falseAttempts: 10 }])
+    //   .eq("id", id)
+    //   .then(() => {
+    //     setBanned((prev) => prev.filter((ban) => ban.id !== id));
+    //   });
+  };
+
   if (authenticated && coursesSections && courses) {
     return (
       <div className={admin.admin}>
@@ -605,6 +630,21 @@ function Admin() {
               </div>
             );
           })}
+        </div>
+        <hr />
+        <div className={admin.banned_users}>
+          {banned ? (
+            banned.map((user, index) => {
+              return (
+                <div className={admin.banned_user} key={index}>
+                  <p>{user.name}</p>
+                  <span onClick={() => unbanUser(user.id)}>فك</span>
+                </div>
+              );
+            })
+          ) : (
+            <p>لا يوجد مستخدمين محظورين</p>
+          )}
         </div>
         <hr />
         {newCourseId ? (

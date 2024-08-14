@@ -52,7 +52,7 @@ function Form({ type, sendUserData }) {
     }-${Math.random().toString()}-${window.navigator.userAgentData.mobile}`;
     await supabase
       .from("devices")
-      .insert([{ email: email, devices: [devicesId] }])
+      .insert([{ email: email, devices: [devicesId], name: name }])
       .then(() => localStorage.setItem("deviceId", devicesId));
   };
   const updateDeviceId = (preDeviceId) => {
@@ -63,7 +63,6 @@ function Form({ type, sendUserData }) {
       .from("devices")
       .update([
         {
-          email: email,
           devices: preDeviceId ? [preDeviceId, devicesId] : [devicesId],
         },
       ])

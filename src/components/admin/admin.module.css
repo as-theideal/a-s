@@ -104,3 +104,32 @@
   flex-direction: column;
   gap: 10px;
 }
+
+.banned_users {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.banned_users .banned_user {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 30px;
+  box-sizing: border-box;
+  background-color: #fff;
+  border-radius: 10px;
+  align-items: center;
+}
+.banned_user span {
+  background-color: var(--primary-color);
+  border-radius: 10px;
+  padding: 10px 15px;
+  color: var(--normal-color);
+  cursor: pointer;
+}
+.banned_users p {
+  text-align: center;
+}
