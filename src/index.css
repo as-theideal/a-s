@@ -202,6 +202,16 @@ img {
   width: 100%;
   border: 1px solid var(--primary-color);
 }
+
+.swiper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.swiper-pagination {
+  position: static;
+}
+
 @keyframes show_section {
   from {
     transform: scaleY(0);
