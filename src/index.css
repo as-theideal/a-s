@@ -209,11 +209,18 @@ img {
   gap: 20px;
   width: 90vw !important;
   align-items: center;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 40px 50px !important;
+  box-sizing: border-box;
 }
 .swiper-pagination {
   position: static !important;
   transform: translateX(-1px) scale(1.2) !important;
   padding-bottom: 5px;
+}
+.swiper-pagination span {
+  background-color: var(--primary-color);
 }
 .autoplay-progress {
   position: absolute;
@@ -226,7 +233,7 @@ img {
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  color: var(--swiper-theme-color);
+  color: var(--secondary-color);
 }
 
 .autoplay-progress svg {
@@ -238,7 +245,7 @@ img {
   width: 100%;
   height: 100%;
   stroke-width: 4px;
-  stroke: var(--swiper-theme-color);
+  stroke: var(--primary-color);
   fill: none;
   stroke-dashoffset: calc(125.6px * (1 - var(--progress)));
   stroke-dasharray: 125.6;

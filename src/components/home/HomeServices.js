@@ -28,7 +28,6 @@ function HomeBenefits() {
     progressCircle.current.style.setProperty("--progress", 1 - progress);
     progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
   };
-  const [activeSlide, setActiveSlide] = useState(0);
   return (
     <div className={home.services}>
       <Swiper
@@ -53,7 +52,6 @@ function HomeBenefits() {
         }}
         onAutoplayTimeLeft={onAutoplayTimeLeft}
         pagination={{ clickable: true, dynamicBullets: true }}
-        onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
       >
         <SwiperSlide>
           <div className={home.card}>
