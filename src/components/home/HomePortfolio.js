@@ -4,8 +4,6 @@ import { motion } from "framer-motion";
 import portfoliolottie from "../../assets/portfolioPgLottie.json";
 import { DotLottiePlayer } from "@dotlottie/react-player";
 import portfolioimg from "../../assets/portfolio.png";
-import Lottie from "react-lottie-player";
-import wave from "../../assets/wave1.json";
 const HomePortfolio = () => {
   const animate = {
     hidden: {
@@ -55,14 +53,6 @@ const HomePortfolio = () => {
               Ahmed Salama
               <span>The ideal in chemistry</span>
             </h2>
-            <div className={home.wave}>
-              <Lottie
-                loop
-                animationData={wave}
-                play
-                style={{ width: 150, height: 150 }}
-              />
-            </div>
           </div>
         </>
       ) : (
@@ -82,14 +72,6 @@ const HomePortfolio = () => {
           </div>
           <div className={home.portfolio_img}>
             <img src={portfolioimg} alt="personal img" loading="lazy" />
-          </div>
-          <div className={home.wave}>
-            <Lottie
-              loop
-              animationData={wave}
-              play
-              style={{ width: 150, height: 150 }}
-            />
           </div>
         </>
       )}

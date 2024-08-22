@@ -118,14 +118,6 @@
   position: relative;
 }
 
-.portfolio .wave {
-  position: absolute;
-  bottom: -50px;
-}
-.portfolio .wave div {
-  width: 100% !important;
-  height: 100% !important;
-}
 .portfolio .portofolio_lottie {
   width: 5em !important;
   height: 5em !important;
@@ -189,7 +181,6 @@
   flex-direction: column;
   align-items: center;
   padding-bottom: 5px;
-  /* background-color: var(--normal-color); */
 }
 .card img {
   width: 150px;
@@ -365,7 +356,6 @@ svg {
     display: flex;
     flex-direction: column;
     padding-bottom: 70px;
-    padding-top: 70px;
   }
   .services .cards {
     width: 100%;
