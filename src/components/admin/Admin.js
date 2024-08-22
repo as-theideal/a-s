@@ -9,10 +9,10 @@ function Admin() {
   const [authenticated, setAuthenticated] = useState(false);
 
   // State to hold the list of courses
-  const [courses, setCourses] = useState();
+  const [courses, setCourses] = useState([]);
 
   // State to hold the list of FAQs
-  const [faqs, setFaqs] = useState();
+  const [faqs, setFaqs] = useState([]);
 
   // State to manage the navigation between different FAQ views (e.g., all, answered, unanswered)
   const [faqsNav, setFaqsNav] = useState("all");
@@ -20,7 +20,7 @@ function Admin() {
   // State to hold sections for each course
   const [coursesSections, setCoursesSections] = useState([]);
   // State to hold banned for each course
-  const [banned, setBanned] = useState();
+  const [banned, setBanned] = useState([]);
 
   // State to track the currently active panel in the admin interface
   const [activePanal, setActivePanal] = useState("");
@@ -91,53 +91,38 @@ function Admin() {
   }
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      await supabase
-        .from("courses_info")
-        .select("*")
-        .then(async ({ data }) => {
-          setCourses(data);
-          data.map(async (course) => {
-            await supabase
-              .from(course.id)
-              .select("*")
-              .then(({ data, error }) => {
-                if (!error) {
-                  setCoursesSections((prev) =>
-                    prev ? [...prev, data] : [data]
-                  );
-                }
-              });
-          });
+    supabase
+      .from("courses_info")
+      .select("*")
+      .then(async ({ data }) => {
+        setCourses(data);
+        data.map(async (course) => {
+          await supabase
+            .from(course.id)
+            .select("*")
+            .then(({ data, error }) => {
+              if (!error) {
+                setCoursesSections((prev) => (prev ? [...prev, data] : [data]));
+              }
+            });
         });
-    };
-    const fetchBanned = async () => {
-      await supabase
-        .from("devices")
-        .select("*")
-        .eq("falseAttempts", 0)
-        .then(async ({ data }) => {
-          data && setBanned(data);
-        });
-    };
-    const fetchFaqs = async () => {
-      await supabase
-        .from("faqs")
-        .select("*")
-        .then(async ({ data }) => {
-          setFaqs(data);
-        });
-    };
-    if (!courses) {
-      fetchCourses();
-    }
-    if (!faqs) {
-      fetchFaqs();
-    }
-    if (!banned) {
-      fetchBanned();
-    }
-  }, [banned, courses, faqs]);
+      });
+
+    supabase
+      .from("devices")
+      .select("*")
+      .eq("falseAttempts", 0)
+      .then(async ({ data }) => {
+        data && setBanned(data);
+      });
+
+    supabase
+      .from("faqs")
+      .select("*")
+      .then(async ({ data }) => {
+        setFaqs(data);
+      });
+  }, []);
 
   const addVideo = async () => {
     await supabase
@@ -368,13 +353,13 @@ function Admin() {
     };
   const unbanUser = (id) => {
     Toast("تم فك الحظر");
-    // supabase
-    //   .from("devices")
-    //   .update([{ falseAttempts: 10 }])
-    //   .eq("id", id)
-    //   .then(() => {
-    //     setBanned((prev) => prev.filter((ban) => ban.id !== id));
-    //   });
+    supabase
+      .from("devices")
+      .update([{ falseAttempts: 10 }])
+      .eq("id", id)
+      .then(() => {
+        setBanned((prev) => prev.filter((ban) => ban.id !== id));
+      });
   };
 
   if (authenticated && coursesSections && courses) {
@@ -633,7 +618,7 @@ function Admin() {
         </div>
         <hr />
         <div className={admin.banned_users}>
-          {banned ? (
+          {banned.length ? (
             banned.map((user, index) => {
               return (
                 <div className={admin.banned_user} key={index}>
@@ -643,7 +628,7 @@ function Admin() {
               );
             })
           ) : (
-            <p>لا يوجد مستخدمين محظورين</p>
+            <p>لا يوجد مستخدمون تحت الحظر</p>
           )}
         </div>
         <hr />
