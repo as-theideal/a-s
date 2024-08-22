@@ -3,8 +3,14 @@ import timesaving from "../../assets/time.png";
 import highquality from "../../assets/highQuality.png";
 import homeworks from "../../assets/exams.png";
 import qanda from "../../assets/faq.png";
+import { useRef, useState } from "react";
 
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import {
+  Navigation,
+  Pagination,
+  EffectCreative,
+  Autoplay,
+} from "swiper/modules";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -12,22 +18,42 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/scrollbar";
 import "swiper/css/autoplay";
+import "swiper/css/effect-creative";
+
 function HomeBenefits() {
+  const progressCircle = useRef(null);
+  const progressContent = useRef(null);
+  const onAutoplayTimeLeft = (s, time, progress) => {
+    progressCircle.current.style.setProperty("--progress", 1 - progress);
+    progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
+  };
+  const [activeSlide, setActiveSlide] = useState(0);
   return (
     <div className={home.services}>
-      {/* <img src={services_banner} alt="banner" /> */}
       <Swiper
-        style={{ width: "100%", height: "fit-content" }}
-        // install Swiper modules
-        modules={[Navigation, Pagination, A11y]}
-        spaceBetween={50}
+        modules={[Pagination, EffectCreative, Autoplay]}
+        effect={"creative"}
+        loop={true}
+        grabCursor={true}
+        creativeEffect={{
+          prev: {
+            shadow: false,
+            translate: [0, 0, -4000],
+          },
+          next: {
+            translate: ["100%", 0, 0],
+          },
+        }}
         slidesPerView={1}
-        navigation
-        pagination={{ clickable: true }}
-        onSwiper={(swiper) => console.log(swiper)}
-        onSlideChange={() => console.log("slide change")}
+        centeredSlides={true}
+        autoplay={{
+          delay: 3000,
+          disableOnInteraction: false,
+        }}
+        onAutoplayTimeLeft={onAutoplayTimeLeft}
+        pagination={{ clickable: true, dynamicBullets: true }}
+        onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
       >
         <SwiperSlide>
           <div className={home.card}>
@@ -55,6 +81,12 @@ function HomeBenefits() {
             <p>اسأل و احنا نجاوبك</p>
           </div>
         </SwiperSlide>
+        <div className="autoplay-progress" slot="container-end">
+          <svg viewBox="0 0 48 48" ref={progressCircle}>
+            <circle cx="24" cy="24" r="20"></circle>
+          </svg>
+          <span ref={progressContent}></span>
+        </div>
       </Swiper>
       {/* <div className={home.services_banner}></div> */}
     </div>
