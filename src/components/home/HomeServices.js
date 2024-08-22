@@ -3,14 +3,9 @@ import timesaving from "../../assets/time.png";
 import highquality from "../../assets/highQuality.png";
 import homeworks from "../../assets/exams.png";
 import qanda from "../../assets/faq.png";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
-import {
-  Navigation,
-  Pagination,
-  EffectCreative,
-  Autoplay,
-} from "swiper/modules";
+import { Pagination, EffectCreative, Autoplay } from "swiper/modules";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -22,6 +17,7 @@ import "swiper/css/autoplay";
 import "swiper/css/effect-creative";
 
 function HomeBenefits() {
+  const platform = window.innerWidth <= 450;
   const progressCircle = useRef(null);
   const progressContent = useRef(null);
   const onAutoplayTimeLeft = (s, time, progress) => {
@@ -32,8 +28,8 @@ function HomeBenefits() {
     <div className={home.services}>
       <Swiper
         modules={[Pagination, EffectCreative, Autoplay]}
-        effect={"creative"}
         loop={true}
+        effect={platform ? "creative" : null}
         grabCursor={true}
         creativeEffect={{
           prev: {
@@ -44,8 +40,8 @@ function HomeBenefits() {
             translate: ["100%", 0, 0],
           },
         }}
-        slidesPerView={1}
-        centeredSlides={true}
+        slidesPerView={platform ? 1 : 2}
+        centeredSlides={platform}
         autoplay={{
           delay: 3000,
           disableOnInteraction: false,
