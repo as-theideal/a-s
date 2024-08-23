@@ -20,8 +20,8 @@ function Course() {
   const [faqs, setfaqs] = useState([]);
 
   useEffect(() => {
-    const fetchCourse = async (courseId) => {
-      await supabase
+    const fetchCourse = (courseId) => {
+      supabase
         .from(courseId)
         .select("*")
         .then(({ data, error }) => {
@@ -33,11 +33,12 @@ function Course() {
           }
         });
     };
-    const fetchFaqs = async (courseId) => {
-      await supabase
+    const fetchFaqs = (courseId) => {
+      supabase
         .from("faqs")
         .select("*")
         .eq("course_id", courseId)
+        .neq("answer", null)
         .then(({ data, error }) => {
           if (error) {
             Toast(error.message);
@@ -90,7 +91,7 @@ function Course() {
           });
       }
     });
-  }, [courseurlFromLink]);
+  }, []);
 
   const handleShowSectionContent = (sectionInn) => {
     document.querySelectorAll(".section")[
@@ -224,21 +225,16 @@ function Course() {
             <div className="faqs" style={{ padding: 0 }}>
               <div className="faqs_list">
                 {faqs.length ? (
-                  faqs.map(
-                    (faq, inn) =>
-                      faq.answer && (
-                        <div key={inn} className="faq" id={courseStyle.faq}>
-                          <p style={{ width: "fit-content" }}>
-                            {faq.user_name}
-                          </p>
-                          <div>
-                            <p>س : {faq.question}</p>
+                  faqs.map((faq, inn) => (
+                    <div key={inn} className="faq" id={courseStyle.faq}>
+                      <p style={{ width: "fit-content" }}>{faq.user_name}</p>
+                      <div>
+                        <p>س : {faq.question}</p>
 
-                            <p style={{ paddingRight: 25 }}>ا : {faq.answer}</p>
-                          </div>
-                        </div>
-                      )
-                  )
+                        <p style={{ paddingRight: 25 }}>ا : {faq.answer}</p>
+                      </div>
+                    </div>
+                  ))
                 ) : (
                   <p>كن اول من يسأل</p>
                 )}

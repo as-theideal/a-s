@@ -49,7 +49,7 @@ function Form({ type, sendUserData }) {
   const insertDeviceId = async () => {
     let devicesId = `${
       window.navigator.userAgent
-    }-${Math.random().toString()}-${window.navigator.userAgentData.mobile}`;
+    }-${Math.random().toString()}-${Math.random().toString()}`;
     await supabase
       .from("devices")
       .insert([{ email: email, devices: [devicesId], name: name }])
@@ -58,7 +58,7 @@ function Form({ type, sendUserData }) {
   const updateDeviceId = (preDeviceId) => {
     let devicesId = `${
       window.navigator.userAgent
-    }-${Math.random().toString()}-${window.navigator.userAgentData.mobile}`;
+    }-${Math.random().toString()}-${Math.random().toString()}`;
     supabase
       .from("devices")
       .update([
@@ -363,15 +363,17 @@ function Form({ type, sendUserData }) {
                   كلمة السر :
                 </span>
               </div>
-              <p
-                onClick={() => {
-                  setForgetPass(true);
-                  setWait(true);
-                }}
-                style={{ cursor: "pointer" }}
-              >
-                نسيت كلمة السر
-              </p>
+              {type === "login" && (
+                <p
+                  onClick={() => {
+                    setForgetPass(true);
+                    setWait(true);
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
+                  نسيت كلمة السر
+                </p>
+              )}
               <input
                 type="submit"
                 value={formType ? "التسجيل" : "تسجيل الدخول"}

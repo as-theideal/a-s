@@ -325,20 +325,28 @@ function Admin() {
       .select("id")
       .then(({ data, error }) => setNewCourseId(data[0].id));
   };
+  const handleShowUpdateAnswerForm = (inx) => {
+    document.querySelectorAll(".update_answer_form").forEach((form, inn) => {
+      form.style.display = inn === inx ? "flex" : "none";
+    });
+  };
+
   const handleAnswerAFaq = async (e, faq_id, inn) => {
       e.preventDefault();
       await supabase
         .from("faqs")
         .update([
-          { answer: document.querySelectorAll(".faq input")[inn].value },
+          { answer: document.querySelectorAll(".faq form")[inn][0].value },
         ])
         .eq("id", faq_id)
-        .then(({ data, error }) => !error && setFaqs(data));
-    },
-    handleShowUpdateAnswerForm = (inx) => {
-      document.querySelectorAll(".update_answer_form").forEach((form, inn) => {
-        form.style.display = inn === inx ? "flex" : "none";
-      });
+        .select()
+        .then(({ data, error }) => {
+          !error &&
+            setFaqs((prev) =>
+              prev.map((faq) => (faq.id === data[0].id ? data[0] : faq))
+            );
+          handleShowUpdateAnswerForm();
+        });
     },
     deleteFaq = async (id) => {
       await supabase

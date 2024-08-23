@@ -13,6 +13,7 @@ function FilePanal({ data }) {
           alignItems: "center",
         }}
         href={`https://as-theideal.b-cdn.net/courses_files/${data.url}`}
+        download
       >
         <svg
           style={{ fill: "var(--text-color)" }}

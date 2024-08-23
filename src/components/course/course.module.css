@@ -171,6 +171,7 @@ p {
   padding: 10px 20px;
   box-sizing: border-box;
   resize: vertical;
+  border-radius: 10px;
 }
 #faq {
   flex-direction: row;
