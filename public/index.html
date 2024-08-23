@@ -9,6 +9,48 @@
     <title>Ahmed Salama</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div
+        class="loading_page"
+        style="
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          margin-top: 15vh;
+        "
+      >
+        <img src="%PUBLIC_URL%/logo.ico" alt="loading" />
+        <div class="spans">
+          <span style="--i: 0s"></span>
+          <span style="--i: 0.5s"></span>
+          <span style="--i: 1s"></span>
+        </div>
+      </div>
+    </div>
+    <style>
+      .loading_page .spans {
+        display: flex;
+        gap: 20px;
+        margin-top: 50px;
+      }
+      .loading_page .spans span {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #39b68a;
+        border: 2px solid #eee;
+        outline: #39b68a 1px solid;
+        animation: upanddown 1s var(--i) infinite alternate;
+      }
+      @keyframes upanddown {
+        from {
+          transform: translateY(-20px);
+        }
+        to {
+          transform: translateY(20px);
+        }
+      }
+    </style>
   </body>
 </html>

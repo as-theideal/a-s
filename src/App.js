@@ -13,6 +13,7 @@ import Success from "./components/success/Success";
 import supabase from "./Supabase";
 
 function App() {
+  console.log("erf");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
 
