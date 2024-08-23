@@ -213,6 +213,7 @@ img {
   border-radius: 20px;
   padding: 40px 50px !important;
   box-sizing: border-box;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 .swiper-pagination {
   position: static !important;
