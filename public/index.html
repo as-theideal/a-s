@@ -10,16 +10,7 @@
   </head>
   <body>
     <div id="root">
-      <div
-        class="loading_page"
-        style="
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          margin-top: 15vh;
-        "
-      >
+      <div class="loading_page">
         <img src="%PUBLIC_URL%/logo.ico" alt="loading" />
         <div class="spans">
           <span style="--i: 0s"></span>
@@ -29,6 +20,14 @@
       </div>
     </div>
     <style>
+      .loading_page {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 50px;
+      }
       .loading_page .spans {
         display: flex;
         gap: 20px;
