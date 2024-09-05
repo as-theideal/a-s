@@ -1,7 +1,7 @@
 {
   "name": "my-app",
   "version": "0.1.0",
-  "homepage": "https://ahmd-salama.netlify.app",
+  "homepage": "https://dr-ahmed-salama.com",
   "private": false,
   "dependencies": {
     "@dotlottie/react-player": "^1.6.19",

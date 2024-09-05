@@ -22,6 +22,9 @@ function Admin() {
   // State to hold banned for each course
   const [banned, setBanned] = useState([]);
 
+  // State to hold unapproved for each course
+  const [unapproved, setUnapproved] = useState([]);
+
   // State to track the currently active panel in the admin interface
   const [activePanal, setActivePanal] = useState("");
 
@@ -107,6 +110,22 @@ function Admin() {
             });
         });
       });
+    supabase
+      .from("center_courses")
+      .select("*")
+      .then(async ({ data }) => {
+        setCourses(data);
+        data.map(async (course) => {
+          await supabase
+            .from(course.id)
+            .select("*")
+            .then(({ data, error }) => {
+              if (!error) {
+                setCoursesSections((prev) => (prev ? [...prev, data] : [data]));
+              }
+            });
+        });
+      });
 
     supabase
       .from("devices")
@@ -114,6 +133,14 @@ function Admin() {
       .eq("falseAttempts", 0)
       .then(async ({ data }) => {
         data && setBanned(data);
+      });
+
+    supabase
+      .from("users")
+      .select("id,approved,name")
+      .eq("approved", false)
+      .then(async ({ data }) => {
+        data && setUnapproved(data);
       });
 
     supabase
@@ -228,12 +255,15 @@ function Admin() {
       });
   };
   const addSection = async () => {
-    await supabase.from(activeCourse).insert([
-      {
-        title: sectionTitleToAdd.current.value,
-        content: [],
-      },
-    ]);
+    await supabase
+      .from(activeCourse)
+      .insert([
+        {
+          title: sectionTitleToAdd.current.value,
+          content: [],
+        },
+      ])
+      .then(Toast("تم"));
   };
   const next = () => {
     const inputs = document.querySelectorAll("#add_mcq_inputs input");
@@ -360,13 +390,25 @@ function Admin() {
         );
     };
   const unbanUser = (id) => {
-    Toast("تم فك الحظر");
     supabase
       .from("devices")
       .update([{ falseAttempts: 10 }])
       .eq("id", id)
       .then(() => {
         setBanned((prev) => prev.filter((ban) => ban.id !== id));
+        Toast("تم فك الحظر");
+      });
+  };
+  const approveUser = (id) => {
+    Toast("تم فك الحظر");
+    supabase
+      .from("users")
+      .update([{ approved: true }])
+      .eq("id", id)
+      .then(() => {
+        setUnapproved((prev) =>
+          prev.filter((unapproved) => unapproved.id !== id)
+        );
       });
   };
 
@@ -627,16 +669,37 @@ function Admin() {
         <hr />
         <div className={admin.banned_users}>
           {banned.length ? (
-            banned.map((user, index) => {
-              return (
-                <div className={admin.banned_user} key={index}>
-                  <p>{user.name}</p>
-                  <span onClick={() => unbanUser(user.id)}>فك</span>
-                </div>
-              );
-            })
+            <>
+              <p>الطلاب المحظورين</p>
+              {banned.map((user, index) => {
+                return (
+                  <div className={admin.banned_user} key={index}>
+                    <p>{user.name}</p>
+                    <span onClick={() => unbanUser(user.id)}>فك</span>
+                  </div>
+                );
+              })}
+            </>
           ) : (
             <p>لا يوجد مستخدمون تحت الحظر</p>
+          )}
+        </div>
+        <hr />
+        <div className={admin.unapproved_users}>
+          {unapproved.length ? (
+            <>
+              <p>الطلاب المعلقين</p>
+              {unapproved.map((user, index) => {
+                return (
+                  <div className={admin.unapproved_user} key={index}>
+                    <p>{user.name}</p>
+                    <span onClick={() => approveUser(user.id)}>تم</span>
+                  </div>
+                );
+              })}
+            </>
+          ) : (
+            <p>لا يوجد مستخدمون معلقون</p>
           )}
         </div>
         <hr />

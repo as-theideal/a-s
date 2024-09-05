@@ -58,7 +58,11 @@ function Course() {
         setUserName(userData.data.user.user_metadata.name.split(" ")[0]);
         setUserId(userData.data.user.id.split("-"));
         await supabase
-          .from("courses_info")
+          .from(
+            userData.data.user.user_metadata.type
+              ? "courses_info"
+              : "center_courses"
+          )
           .select("id")
           .eq("url", courseurlFromLink)
           .then(async ({ data, error }) => {

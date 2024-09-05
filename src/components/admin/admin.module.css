@@ -105,7 +105,8 @@
   gap: 10px;
 }
 
-.banned_users {
+.banned_users,
+.unapproved_users {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -113,7 +114,8 @@
   padding: 10px;
   box-sizing: border-box;
 }
-.banned_users .banned_user {
+.banned_users .banned_user,
+.unapproved_user {
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -123,10 +125,11 @@
   border-radius: 10px;
   align-items: center;
 }
-.banned_user span {
+.banned_user span,
+.unapproved_user span {
   background-color: var(--primary-color);
   border-radius: 10px;
-  padding: 10px 15px;
+  padding: 5px 15px;
   color: var(--normal-color);
   cursor: pointer;
 }

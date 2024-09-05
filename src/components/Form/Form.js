@@ -14,6 +14,8 @@ function Form({ type, sendUserData }) {
   const formType = type === "signup";
   const [forgetPass, setForgetPass] = useState(false);
   const [code, setCode] = useState("");
+  const [select, setSelect] = useState("true");
+  const [year, setYear] = useState(1);
 
   const reset = () => {
     setName("");
@@ -79,7 +81,7 @@ function Form({ type, sendUserData }) {
           token: code,
           type: "email",
         })
-        .then(({ data, error }) => {
+        .then(({ error }) => {
           if (error) {
             Toast(error.message);
             setWait(false);
@@ -101,6 +103,8 @@ function Form({ type, sendUserData }) {
               data: {
                 name: name,
                 phone: phone,
+                type: select === "true",
+                year: +year,
               },
             },
           })
@@ -112,6 +116,7 @@ function Form({ type, sendUserData }) {
               nav("/login");
             } else {
               Toast(data.error.message);
+              setWait(false);
             }
           });
         insertDeviceId();
@@ -126,12 +131,12 @@ function Form({ type, sendUserData }) {
               setWait(false);
               return;
             }
-            if (data.length === 0) {
+            if (!data.length) {
               insertDeviceId();
               auth();
               return;
             }
-            if (data[0].devices.length === 0) {
+            if (!data[0].devices.length) {
               updateDeviceId();
               auth();
             }
@@ -140,51 +145,18 @@ function Form({ type, sendUserData }) {
                 if (data[0].devices[0] === localStorage.getItem("deviceId")) {
                   auth();
                 } else {
-                  if (data[0].devices.length < 2) {
-                    updateDeviceId(data[0].devices[0]);
-                    auth();
-                  } else {
-                    supabase
-                      .from("devices")
-                      .update("falseAttempts", data[0].falseAttempts - 1)
-                      .eq("email", email)
-                      .then(
-                        Toast("لقد تجاوزت الحد الاقصى للعدد الاجهزة المسموحة")
-                      );
-                  }
-                }
-              } else if (data[0].devices.length > 1) {
-                let x = data[0].devices.some((id) => {
-                  return id === localStorage.getItem("deviceId");
-                });
-                if (x) {
-                  auth();
-                } else {
                   supabase
                     .from("devices")
                     .update([{ falseAttempts: data[0].falseAttempts - 1 }])
                     .eq("email", email)
-                    .select()
-                    .then(({ data }) => {
+                    .then(() => {
                       Toast("لقد تجاوزت الحد الاقصى للعدد الاجهزة المسموحة");
-                      setTimeout(
-                        () =>
-                          Toast(
-                            `${
-                              data[0].falseAttempts
-                                ? `عدد المحاولات المتبقية : ${data[0].falseAttempts}`
-                                : "تم حظر حسابك تواصل مع الدعم"
-                            }`
-                          ),
-                        7000
-                      );
+                      setWait(false);
                     });
-                  setWait(false);
-                  reset();
                 }
               }
             } else {
-              Toast("تم حظر حسابك تواصل مع الدعم");
+              Toast("تم حظر حسابك, تواصل مع الدعم");
             }
           });
       }
@@ -363,6 +335,29 @@ function Form({ type, sendUserData }) {
                   كلمة السر :
                 </span>
               </div>
+              {formType && (
+                <>
+                  <div>
+                    <select
+                      value={select}
+                      onChange={(e) => setSelect(e.target.value)}
+                    >
+                      <option value={true}>اونلاين</option>
+                      <option value={false}>سنتر</option>
+                    </select>
+                  </div>
+                  <div>
+                    <select
+                      value={year}
+                      onChange={(e) => setYear(e.target.value)}
+                    >
+                      <option value={1}>اولى ثانوي</option>
+                      <option value={2}>ثانية ثانوي</option>
+                      <option value={3}>ثالثة ثانوي</option>
+                    </select>
+                  </div>
+                </>
+              )}
               {type === "login" && (
                 <p
                   onClick={() => {

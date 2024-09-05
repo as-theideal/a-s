@@ -58,9 +58,9 @@ function Years() {
         phone: user.phone,
       },
       redirectionUrls: {
-        successUrl: "http://localhost:3000/success",
-        failUrl: "http://localhost:3000/",
-        pendingUrl: "http://localhost:3000/user",
+        successUrl: "https://dr-ahmed-salama.com/success",
+        failUrl: "https://dr-ahmed-salama.com/user",
+        pendingUrl: "https://dr-ahmed-salama.com/user",
       },
       cartItems: [
         {
@@ -100,6 +100,28 @@ function Years() {
     setWait(false);
   };
 
+  const buyFreeCourse = async (course_id) => {
+    await supabase
+      .from("users")
+      .select("courses")
+      .eq("id", user.id)
+      .then(async ({ data, error }) => {
+        if (error) {
+          Toast("حدث خطا ما اعد المحاولة");
+          return;
+        } else {
+          await supabase
+            .from("users")
+            .update({
+              courses: [...data[0].courses, course_id],
+            })
+            .eq("id", user.id);
+          Toast("تم شراء في الكورس");
+        }
+      });
+    setWait(false);
+  };
+
   return (
     data.length && (
       <div className={years.years}>
@@ -121,7 +143,10 @@ function Years() {
               <button
                 className="primary_bt"
                 onClick={() => {
-                  pay(course.id, course.price);
+                  setWait(true);
+                  course.price
+                    ? pay(course.id, course.price)
+                    : buyFreeCourse(course.id);
                   setWait(true);
                 }}
               >

@@ -85,7 +85,15 @@ hr {
   animation-fill-mode: forwards;
   color: #666;
 }
-
+.form .inner select {
+  width: 100%;
+  border: none;
+  padding: 10px;
+  font-size: 17px;
+  color: var(--text-color);
+  border-radius: 10px;
+  font-weight: bold;
+}
 @media (max-width: 768px) {
   .form {
     width: 90vw;

@@ -10,11 +10,13 @@ import Faqs from "./faqs/Faqs";
 
 function User({ isLoggedIn }) {
   const [user, setUser] = useState({});
+  const [userType, setUserType] = useState(true);
   const [userId, setUserId] = useState("");
   const [activeCom, setActiveCom] = useState("profile");
   const [courses, setcourses] = useState([]);
   const [invoices, setInvoices] = useState([]);
   const [faqs, setFaqs] = useState([]);
+  const [approved, setApproved] = useState(true);
 
   useEffect(() => {
     const fetch = () => {
@@ -26,6 +28,8 @@ function User({ isLoggedIn }) {
         if (data.user.aud === "authenticated") {
           setUser(data.user.user_metadata);
           setUserId(data.user.id);
+          setUserType(data.user.user_metadata.type);
+
           await supabase
             .from("users")
             .select("courses")
@@ -34,22 +38,85 @@ function User({ isLoggedIn }) {
               if (userDb.error) {
                 Toast(userDb.error.message);
               } else if (userDb.data.length) {
+                supabase
+                  .from("users")
+                  .select("approved")
+                  .eq("id", data.user.id)
+                  .then((approved) => {
+                    if (!approved.data[0].approved) {
+                      setApproved(false);
+                      return;
+                    } else {
+                      setApproved(true);
+                    }
+                  });
                 if (userDb.data[0].courses) {
                   userDb.data[0].courses.map(async (courseId) => {
-                    supabase
-                      .from("courses_info")
-                      .select("*")
-                      .eq("id", courseId)
-                      .then(({ data, error }) => {
-                        if (data) {
-                          setcourses((prev) =>
-                            prev ? [...prev, data[0]] : [data[0]]
-                          );
-                        }
-                        if (error) {
-                          Toast(error.message);
-                        }
-                      });
+                    if (courseId === "1ee8038e-b2c5-4b57-9bd4-f15771c0f3cb") {
+                      supabase
+                        .from("center_courses")
+                        .select("title,img_url,url")
+                        .eq("id", courseId)
+                        .then(({ data, error }) => {
+                          if (data.length) {
+                            setcourses((prev) =>
+                              prev ? [...prev, data[0]] : [data[0]]
+                            );
+                          }
+                          if (error) {
+                            Toast(error.message);
+                          }
+                        });
+                    } else if (
+                      courseId === "bbe2b1b2-6df8-41c9-8aed-4ca0eaf5a126"
+                    ) {
+                      supabase
+                        .from("center_courses")
+                        .select("title,img_url,url")
+                        .eq("id", courseId)
+                        .then(({ data, error }) => {
+                          if (data.length) {
+                            setcourses((prev) =>
+                              prev ? [...prev, data[0]] : [data[0]]
+                            );
+                          }
+                          if (error) {
+                            Toast(error.message);
+                          }
+                        });
+                    } else if (
+                      courseId === "d29e64c5-8920-4ddc-9a25-2de9edba81fb"
+                    ) {
+                      supabase
+                        .from("center_courses")
+                        .select("title,img_url,url")
+                        .eq("id", courseId)
+                        .then(({ data, error }) => {
+                          if (data.length) {
+                            setcourses((prev) =>
+                              prev ? [...prev, data[0]] : [data[0]]
+                            );
+                          }
+                          if (error) {
+                            Toast(error.message);
+                          }
+                        });
+                    } else {
+                      supabase
+                        .from("courses_info")
+                        .select("title,img_url,url")
+                        .eq("id", courseId)
+                        .then(({ data, error }) => {
+                          if (data.length) {
+                            setcourses((prev) =>
+                              prev ? [...prev, data[0]] : [data[0]]
+                            );
+                          }
+                          if (error) {
+                            Toast(error.message);
+                          }
+                        });
+                    }
                   });
                 }
                 supabase
@@ -101,9 +168,27 @@ function User({ isLoggedIn }) {
                 await supabase
                   .from("users")
                   .insert([
-                    { email: data.user.user_metadata.email, courses: [] },
+                    {
+                      email: data.user.user_metadata.email,
+                      name: data.user.user_metadata.name,
+                      courses: data.user.user_metadata.type
+                        ? []
+                        : [
+                            `${
+                              data.user.user_metadata.year === 1
+                                ? "1ee8038e-b2c5-4b57-9bd4-f15771c0f3cb"
+                                : data.user.user_metadata.year === 2
+                                ? "bbe2b1b2-6df8-41c9-8aed-4ca0eaf5a126"
+                                : data.user.user_metadata.year === 3 &&
+                                  "d29e64c5-8920-4ddc-9a25-2de9edba81fb"
+                            }`,
+                          ],
+                      type: data.user.user_metadata.type,
+                      approved: data.user.user_metadata.type,
+                      year: data.user.user_metadata.year,
+                    },
                   ])
-                  .then((data) => console.log(data));
+                  .then(setApproved(data.user.user_metadata.type));
               }
             });
         } else {
@@ -122,55 +207,65 @@ function User({ isLoggedIn }) {
       <div className={userStyle.user}>
         <div className="container">
           <div className={userStyle.inner}>
-            <div className={userStyle.right_col}>
-              <button
-                onClick={() => setActiveCom("profile")}
-                className={activeCom === "profile" ? userStyle.active : ""}
-              >
-                ملفي الشخصي
-              </button>
-              <button
-                onClick={() => setActiveCom("courses")}
-                className={activeCom === "courses" ? userStyle.active : ""}
-              >
-                كورساتي
-              </button>
-              <button
-                onClick={() => setActiveCom("faqs")}
-                className={activeCom === "faqs" ? userStyle.active : ""}
-              >
-                اسئلتي
-              </button>
-              <button
-                onClick={() => setActiveCom("payments")}
-                className={activeCom === "payments" ? userStyle.active : ""}
-              >
-                فواتيري
-              </button>
-            </div>
-            <div className={userStyle.left_col}>
-              <LeftColTitle
-                text={
-                  activeCom === "profile"
-                    ? "ملفي الشخصي"
-                    : activeCom === "courses"
-                    ? "كورساتي"
-                    : activeCom === "faqs"
-                    ? "اسئلتي"
-                    : "فواتيري"
-                }
-              />
+            {approved ? (
+              <>
+                <div className={userStyle.right_col}>
+                  <button
+                    onClick={() => setActiveCom("profile")}
+                    className={activeCom === "profile" ? userStyle.active : ""}
+                  >
+                    ملفي الشخصي
+                  </button>
+                  <button
+                    onClick={() => setActiveCom("courses")}
+                    className={activeCom === "courses" ? userStyle.active : ""}
+                  >
+                    كورساتي
+                  </button>
+                  <button
+                    onClick={() => setActiveCom("faqs")}
+                    className={activeCom === "faqs" ? userStyle.active : ""}
+                  >
+                    اسئلتي
+                  </button>
+                  <button
+                    onClick={() => setActiveCom("payments")}
+                    className={activeCom === "payments" ? userStyle.active : ""}
+                  >
+                    فواتيري
+                  </button>
+                </div>
+                <div className={userStyle.left_col}>
+                  <LeftColTitle
+                    text={
+                      activeCom === "profile"
+                        ? "ملفي الشخصي"
+                        : activeCom === "courses"
+                        ? "كورساتي"
+                        : activeCom === "faqs"
+                        ? "اسئلتي"
+                        : "فواتيري"
+                    }
+                  />
 
-              {activeCom === "profile" ? (
-                <Profile user={user} />
-              ) : activeCom === "courses" ? (
-                <Courses courses={courses} />
-              ) : activeCom === "faqs" ? (
-                <Faqs faqs={faqs} />
-              ) : (
-                <Payments userId={userId} invoices={invoices} />
-              )}
-            </div>
+                  {activeCom === "profile" ? (
+                    <Profile user={user} />
+                  ) : activeCom === "courses" ? (
+                    <Courses
+                      courses={courses}
+                      userType={userType}
+                      userId={userId}
+                    />
+                  ) : activeCom === "faqs" ? (
+                    <Faqs faqs={faqs} />
+                  ) : (
+                    <Payments userId={userId} invoices={invoices} />
+                  )}
+                </div>
+              </>
+            ) : (
+              <p>تواصل مع الدعم لتفعيل الحساب</p>
+            )}
           </div>
         </div>
       </div>
