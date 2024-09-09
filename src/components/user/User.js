@@ -170,6 +170,8 @@ function User({ isLoggedIn }) {
                   .insert([
                     {
                       email: data.user.user_metadata.email,
+                      phone: data.user.user_metadata.phone,
+                      parent_phone: data.user.user_metadata.parentPhone,
                       name: data.user.user_metadata.name,
                       courses: data.user.user_metadata.type
                         ? []

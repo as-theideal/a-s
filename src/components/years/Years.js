@@ -104,7 +104,7 @@ function Years() {
     await supabase
       .from("users")
       .select("courses")
-      .eq("id", user.id)
+      .eq("id", userId)
       .then(async ({ data, error }) => {
         if (error) {
           Toast("حدث خطا ما اعد المحاولة");
@@ -115,7 +115,7 @@ function Years() {
             .update({
               courses: [...data[0].courses, course_id],
             })
-            .eq("id", user.id);
+            .eq("id", userId);
           Toast("تم شراء في الكورس");
         }
       });
@@ -139,7 +139,7 @@ function Years() {
                 alt="img"
               />
               <p>{course.title}</p>
-              <span>{course.price} جنيه </span>
+              <span>{course.price ? course.price + " ج" : "مجانا"}</span>
               <button
                 className="primary_bt"
                 onClick={() => {

@@ -9,6 +9,7 @@ function Form({ type, sendUserData }) {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [phone, setPhone] = useState("");
+  const [parentPhone, setParentPhone] = useState("");
   const [wait, setWait] = useState(false);
   const [passType, setPassType] = useState(false);
   const formType = type === "signup";
@@ -103,6 +104,7 @@ function Form({ type, sendUserData }) {
               data: {
                 name: name,
                 phone: phone,
+                parentPhone: parentPhone,
                 type: select === "true",
                 year: +year,
               },
@@ -272,6 +274,26 @@ function Form({ type, sendUserData }) {
                       }}
                     >
                       رقم الهاتف :
+                    </span>
+                  </div>
+                  <div>
+                    <input
+                      name="phone"
+                      required
+                      type="number"
+                      placeholder=" رقم هاتف ولي الامر :"
+                      value={parentPhone}
+                      onChange={(e) => setParentPhone(e.target.value)}
+                    />
+                    <span
+                      style={{
+                        animationName: `${
+                          !parentPhone ? "hide_span" : "show_span"
+                        }`,
+                        right: 0,
+                      }}
+                    >
+                      رقم هاتف ولي الامر :
                     </span>
                   </div>
                 </Fragment>

@@ -1,6 +1,6 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
+  "name": "ahmed-salama",
+  "version": "1.0",
   "homepage": "https://dr-ahmed-salama.com",
   "private": false,
   "dependencies": {
@@ -13,7 +13,6 @@
     "framer-motion": "^11.3.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-lottie": "^1.2.4",
     "react-lottie-player": "^2.1.0",
     "react-router-dom": "^6.25.0",
     "react-scripts": "5.0.1",
@@ -25,9 +24,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": [
