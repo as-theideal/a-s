@@ -53,23 +53,21 @@ function Form({ type, sendUserData }) {
     let devicesId = `${
       window.navigator.userAgent
     }-${Math.random().toString()}-${Math.random().toString()}`;
+    let uName;
+    if (!formType) {
+      uName = await supabase.auth
+        .getUser()
+        .then(({ data }) => data.user.user_metadata.name);
+    }
     await supabase
       .from("devices")
-      .insert([{ email: email, devices: [devicesId], name: name }])
-      .then(() => localStorage.setItem("deviceId", devicesId));
-  };
-  const updateDeviceId = (preDeviceId) => {
-    let devicesId = `${
-      window.navigator.userAgent
-    }-${Math.random().toString()}-${Math.random().toString()}`;
-    supabase
-      .from("devices")
-      .update([
+      .insert([
         {
-          devices: preDeviceId ? [preDeviceId, devicesId] : [devicesId],
+          email: email.toLowerCase(),
+          devices: devicesId,
+          name: name ? name : uName,
         },
       ])
-      .eq("email", email)
       .then(() => localStorage.setItem("deviceId", devicesId));
   };
   const handleSubmit = async (e) => {
@@ -112,6 +110,7 @@ function Form({ type, sendUserData }) {
           })
           .then((data) => {
             if (data.data.user) {
+              insertDeviceId();
               Toast("تم التسجيل");
               reset();
               setWait(false);
@@ -121,30 +120,22 @@ function Form({ type, sendUserData }) {
               setWait(false);
             }
           });
-        insertDeviceId();
       } else {
         supabase
           .from("devices")
           .select("*")
-          .eq("email", email)
+          .eq("email", email.toLowerCase())
           .then(({ data, error }) => {
             if (error) {
               Toast(error.message);
               setWait(false);
               return;
-            }
-            if (!data.length) {
+            } else if (!data.length) {
+              auth();
               insertDeviceId();
-              auth();
-              return;
-            }
-            if (!data[0].devices.length) {
-              updateDeviceId();
-              auth();
-            }
-            if (data[0].falseAttempts > 0) {
-              if (data[0].devices.length === 1) {
-                if (data[0].devices[0] === localStorage.getItem("deviceId")) {
+            } else {
+              if (data[0].falseAttempts > 0) {
+                if (data[0].devices === localStorage.getItem("deviceId")) {
                   auth();
                 } else {
                   supabase
@@ -156,9 +147,9 @@ function Form({ type, sendUserData }) {
                       setWait(false);
                     });
                 }
+              } else {
+                Toast("تم حظر حسابك, تواصل مع الدعم");
               }
-            } else {
-              Toast("تم حظر حسابك, تواصل مع الدعم");
             }
           });
       }
