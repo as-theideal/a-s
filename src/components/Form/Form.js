@@ -130,12 +130,10 @@ function Form({ type, sendUserData }) {
               Toast(error.message);
               setWait(false);
               return;
-            }
-            // else if (!data.length) {
-            //   auth();
-            //   insertDeviceId();
-            // }
-            else {
+            } else if (!data.length) {
+              insertDeviceId();
+              auth();
+            } else {
               if (data[0].falseAttempts > 0) {
                 if (data[0].devices === localStorage.getItem("deviceId")) {
                   auth();
