@@ -121,7 +121,7 @@ function Form({ type, sendUserData }) {
             }
           });
       } else {
-        supabase
+        await supabase
           .from("devices")
           .select("*")
           .eq("email", email.toLowerCase())
@@ -130,10 +130,12 @@ function Form({ type, sendUserData }) {
               Toast(error.message);
               setWait(false);
               return;
-            } else if (!data.length) {
-              auth();
-              insertDeviceId();
-            } else {
+            }
+            // else if (!data.length) {
+            //   auth();
+            //   insertDeviceId();
+            // }
+            else {
               if (data[0].falseAttempts > 0) {
                 if (data[0].devices === localStorage.getItem("deviceId")) {
                   auth();
