@@ -29,7 +29,13 @@ function App() {
         setUserName(
           JSON.parse(
             localStorage.getItem("sb-sqbvwnxsbocvrdxbpsfu-auth-token")
-          ).user.user_metadata.name.split(" ")[0]
+          ).user.user_metadata.name.split(" ")[0] === " "
+            ? JSON.parse(
+                localStorage.getItem("sb-sqbvwnxsbocvrdxbpsfu-auth-token")
+              ).user.user_metadata.name.split(" ")[1]
+            : JSON.parse(
+                localStorage.getItem("sb-sqbvwnxsbocvrdxbpsfu-auth-token")
+              ).user.user_metadata.name.split(" ")[0]
         );
       } else {
         supabase.auth.getUser().then(({ data }) => {

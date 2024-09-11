@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import supabase from "../../Supabase";
+import supabase, { adminSupabase } from "../../Supabase";
 import { useNavigate } from "react-router-dom";
 import admin from "./admin.module.css";
 import Toast from "../toast/Toast";
@@ -80,7 +80,7 @@ function Admin() {
       if (data.data.user) {
         if (
           data.data.user.id === "5c0b5606-d91b-46b3-9469-c38c98b5d0ff" ||
-          data.data.user.id === "c6bf9eca-3ab2-4f98-bece-f7e79403fcd3"
+          data.data.user.id === "c8938a0f-e0aa-493b-a4a2-5298a29d89a7"
         ) {
           setAuthenticated(true);
         }
@@ -137,7 +137,7 @@ function Admin() {
 
     supabase
       .from("users")
-      .select("id,approved,name")
+      .select("id,approved,name,email")
       .eq("approved", false)
       .then(async ({ data }) => {
         data && setUnapproved(data);
@@ -398,6 +398,22 @@ function Admin() {
         setBanned((prev) => prev.filter((ban) => ban.id !== id));
         Toast("تم فك الحظر");
       });
+  };
+  const deleteUser = (id, email) => {
+    adminSupabase.auth.admin.deleteUser(id).then(() => {
+      supabase
+        .from("users")
+        .delete()
+        .eq("id", id)
+        .select()
+        .then((data) => {
+          Toast("تم الحذف");
+          setUnapproved((prev) =>
+            prev.filter((unapproved) => unapproved.id !== id)
+          );
+        });
+      supabase.from("devices").delete().eq("email", email);
+    });
   };
   const approveUser = (id) => {
     Toast("تم فك الحظر");
@@ -693,7 +709,19 @@ function Admin() {
                 return (
                   <div className={admin.unapproved_user} key={index}>
                     <p>{user.name}</p>
-                    <span onClick={() => approveUser(user.id)}>تم</span>
+                    <div>
+                      <span
+                        onDoubleClick={() => deleteUser(user.id, user.email)}
+                        style={{
+                          marginLeft: 20,
+                          backgroundColor: "red",
+                          opacity: 0.7,
+                        }}
+                      >
+                        X
+                      </span>
+                      <span onClick={() => approveUser(user.id)}>تم</span>
+                    </div>
                   </div>
                 );
               })}
