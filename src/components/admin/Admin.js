@@ -98,14 +98,16 @@ function Admin() {
       .from("courses_info")
       .select("*")
       .then(async ({ data }) => {
-        setCourses(data);
+        setCourses((prev) => [...prev, ...data]);
         data.map(async (course) => {
           await supabase
             .from(course.id)
             .select("*")
             .then(({ data, error }) => {
               if (!error) {
-                setCoursesSections((prev) => (prev ? [...prev, data] : [data]));
+                setCoursesSections((prev) =>
+                  prev ? [...prev, ...data] : [data]
+                );
               }
             });
         });
@@ -114,7 +116,7 @@ function Admin() {
       .from("center_courses")
       .select("*")
       .then(async ({ data }) => {
-        setCourses(data);
+        setCourses((prev) => [...prev, data]);
         data.map(async (course) => {
           await supabase
             .from(course.id)
@@ -137,7 +139,7 @@ function Admin() {
 
     supabase
       .from("users")
-      .select("id,approved,name,email")
+      .select("id,approved,name,email,year")
       .eq("approved", false)
       .then(async ({ data }) => {
         data && setUnapproved(data);
@@ -709,6 +711,7 @@ function Admin() {
                 return (
                   <div className={admin.unapproved_user} key={index}>
                     <p>{user.name}</p>
+                    <p>{user.year}</p>
                     <div>
                       <span
                         onDoubleClick={() => deleteUser(user.id, user.email)}
