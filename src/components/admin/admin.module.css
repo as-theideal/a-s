@@ -63,6 +63,8 @@
 .admin .courses_list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
   gap: 20px;
 }
 .courses_list .course {
@@ -70,6 +72,10 @@
   flex-direction: column;
   text-align: center;
   width: 250px;
+}
+.courses_list .course img {
+  width: 100%;
+  height: 150px;
 }
 .courses_list .course .spans {
   display: flex;

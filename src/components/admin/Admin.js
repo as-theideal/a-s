@@ -32,7 +32,7 @@ function Admin() {
   const [activeCourse, setActiveCourse] = useState("");
 
   // State to track the currently active section within a course
-  const [activeSection, setActiveSection] = useState("");
+  const [activeSection, setActiveSection] = useState([]);
 
   // State to hold correct answers for questions
   const [correctAnswers, setCorrectANswers] = useState([]);
@@ -98,15 +98,16 @@ function Admin() {
       .from("courses_info")
       .select("*")
       .then(async ({ data }) => {
-        setCourses((prev) => [...prev, ...data]);
         data.map(async (course) => {
           await supabase
             .from(course.id)
             .select("*")
             .then(({ data, error }) => {
               if (!error) {
-                setCoursesSections((prev) =>
-                  prev ? [...prev, ...data] : [data]
+                setCourses((prev) =>
+                  prev
+                    ? [...prev, { ...course, sections: data }]
+                    : { course, section: data }
                 );
               }
             });
@@ -116,14 +117,17 @@ function Admin() {
       .from("center_courses")
       .select("*")
       .then(async ({ data }) => {
-        setCourses((prev) => [...prev, data]);
         data.map(async (course) => {
           await supabase
             .from(course.id)
             .select("*")
             .then(({ data, error }) => {
               if (!error) {
-                setCoursesSections((prev) => (prev ? [...prev, data] : [data]));
+                setCourses((prev) =>
+                  prev
+                    ? [...prev, { ...course, sections: data }]
+                    : { course, section: data }
+                );
               }
             });
         });
@@ -599,34 +603,39 @@ function Admin() {
                 />
                 <p>{course.title}</p>
                 <span>السنة الدراسية : {course.year}</span>
-                {coursesSections[inn] &&
-                  coursesSections[inn].map((section) => {
+                {course.sections &&
+                  course.sections.map((section) => {
                     return (
-                      <span
-                        key={section.id}
-                        onClick={() => {
-                          setActiveSection(section.id);
-                          setActiveCourse(course.id);
-                        }}
-                        style={{
-                          backgroundColor: `${
-                            course.id === activeCourse
-                              ? section.id === activeSection
-                                ? "var(--primary-color)"
+                      <>
+                        <hr />
+                        <span
+                          key={section.id}
+                          onClick={() => {
+                            setActiveSection(section.id);
+                            setActiveCourse(course.id);
+                          }}
+                          style={{
+                            backgroundColor: `${
+                              course.id === activeCourse
+                                ? section.id === activeSection
+                                  ? "var(--primary-color)"
+                                  : "#eee"
                                 : "#eee"
-                              : "#eee"
-                          }`,
-                        }}
-                      >
-                        {section.title}
-                      </span>
+                            }`,
+                          }}
+                        >
+                          -- {section.title} --
+                        </span>
+                      </>
                     );
                   })}
+                <hr />
                 <span
                   onClick={() => {
                     setActivePanal("add_section");
                     setActiveCourse(course.id);
                   }}
+                  style={{ cursor: "pointer", color: "var(--secondary-color)" }}
                 >
                   اضافة قسم
                 </span>
@@ -711,12 +720,13 @@ function Admin() {
                 return (
                   <div className={admin.unapproved_user} key={index}>
                     <p>{user.name}</p>
-                    <p>{user.year}</p>
                     <div>
+                      <p>{user.year}</p>
                       <span
                         onDoubleClick={() => deleteUser(user.id, user.email)}
                         style={{
                           marginLeft: 20,
+                          marginRight: 20,
                           backgroundColor: "red",
                           opacity: 0.7,
                         }}
@@ -730,7 +740,7 @@ function Admin() {
               })}
             </>
           ) : (
-            <p>لا يوجد مستخدمون معلقون</p>
+            <p style={{ textAlign: "center" }}>لا يوجد مستخدمون معلقون</p>
           )}
         </div>
         <hr />
