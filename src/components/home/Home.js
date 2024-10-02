@@ -7,7 +7,6 @@ import edge from "../../assets/edge.lottie";
 import { DotLottiePlayer } from "@dotlottie/react-player";
 import "@dotlottie/react-player/dist/index.css";
 
-// import home_banner from '../../assets/home_banner.jpg'
 function Home({ isLoggedIn }) {
   const [currPg, setCurrPg] = useState(0);
   const homes = [<HomePortfolio />, <HomeServices />, <HomeYears />];
@@ -22,7 +21,6 @@ function Home({ isLoggedIn }) {
       };
     }
   });
-
   return (
     <div
       className={home.home}

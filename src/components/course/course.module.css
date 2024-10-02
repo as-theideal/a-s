@@ -166,7 +166,6 @@ p {
   display: flex;
   justify-content: space-evenly;
 }
-
 .inner textarea {
   padding: 10px 20px;
   box-sizing: border-box;
