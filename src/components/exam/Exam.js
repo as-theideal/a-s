@@ -31,38 +31,20 @@ function Exam() {
       });
   }, []);
   const handleSubmit = async () => {
-    name.current.value
-      ? await supabase
-          .from("exams")
-          .select("records")
-          .eq("id", examId.current)
-          .then(
-            async ({ data }) =>
-              await supabase
-                .from("exams")
-                .update({
-                  records: [
-                    ...data[0].records,
-                    {
-                      name: name.current.value,
-                      time: timer,
-                      selectedAnswers: examData.questions.map(
-                        (el) => el.selectedAnswer
-                      ),
-                    },
-                  ],
-                })
-                .eq("id", examId.current)
-                .then(({ error }) => {
-                  if (error) {
-                    Toast(error.message);
-                    return;
-                  }
-                  Toast("تم التسليم");
-                  setState(true);
-                })
-          )
-      : Toast("تأكد من كتابة اسمك رباعي");
+    if (!name.current.value) {
+      Toast("تأكد من كتابة اسمك رباعي");
+      return;
+    }
+    await supabase.rpc("insert_exam_record", {
+      examid: +examId.current,
+      record: {
+        name: name.current.value,
+        time: timer,
+        selectedAnswers: examData.questions.map((el) => el.selectedAnswer),
+      },
+    });
+    setState(true);
+    Toast("تم التسليم");
   };
   const handleSelect = (inx, e) => {
     document
@@ -77,74 +59,73 @@ function Exam() {
       ),
     }));
   };
-  return (
-    examData &&
-    (!state ? (
-      <div className={exam.exam}>
-        <div className={exam.timer}>
-          <CountdownCircleTimer
-            isPlaying
-            duration={examData.timer * 60}
-            colors={["#39b68a", "#F7B801", "#A30000", "#A30000"]}
-            colorsTime={[7, 5, 2, 0]}
-            size={100}
-            strokeWidth={10}
-            onComplete={handleSubmit}
-            onUpdate={(remainingTime) =>
-              remainingTime / 60 === +(remainingTime / 60).toFixed(0) &&
-              setTimer(remainingTime / 60)
-            }
-          >
-            {({ remainingTime }) =>
-              ~~(remainingTime / 60) + " : " + (remainingTime % 60)
-            }
-          </CountdownCircleTimer>
-        </div>
-        <hr />
-        <input type="text" placeholder="الاسم رباعي : " ref={name} />
-
-        {examData.questions.map((question, inx) => {
-          return (
-            <div className={exam.question} key={inx}>
-              {+question.question ? (
-                <img
-                  src={`https://sqbvwnxsbocvrdxbpsfu.supabase.co/storage/v1/object/public/courses_questions_imgs/${question.question}`}
-                  alt=""
-                />
-              ) : (
-                <h1>
-                  {inx} : {question.question}
-                </h1>
-              )}
-              <div className={exam.answers}>
-                {question.answers.map((answer, inn) => {
-                  return (
-                    <div
-                      name={inx}
-                      id={inn}
-                      onClick={(e) => handleSelect(inx, e)}
-                      className={`${
-                        Object.keys(question).includes("selectedAnswer")
-                          ? question.selectedAnswer === inn
-                            ? "answer selected_answer"
-                            : "answer"
-                          : "answer"
-                      }`}
-                      key={inn}
-                    >
-                      {abcd[inn]} : {answer}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-        <button onClick={handleSubmit}>تسليم</button>
+  return examData && !state ? (
+    <div className={exam.exam}>
+      <div className={exam.timer}>
+        <CountdownCircleTimer
+          isPlaying
+          duration={examData.timer * 60}
+          colors={["#39b68a", "#F7B801", "#A30000", "#A30000"]}
+          colorsTime={[7, 5, 2, 0]}
+          size={100}
+          strokeWidth={10}
+          onComplete={handleSubmit}
+          onUpdate={(remainingTime) =>
+            remainingTime / 60 === +(remainingTime / 60).toFixed(0) &&
+            setTimer(remainingTime / 60)
+          }
+        >
+          {({ remainingTime }) =>
+            ~~(remainingTime / 60) + " : " + (remainingTime % 60)
+          }
+        </CountdownCircleTimer>
       </div>
-    ) : (
+      <hr />
+      <input type="text" placeholder="الاسم رباعي : " ref={name} />
+
+      {examData.questions.map((question, inx) => {
+        return (
+          <div className={exam.question} key={inx}>
+            {+question.question ? (
+              <img
+                src={`https://sqbvwnxsbocvrdxbpsfu.supabase.co/storage/v1/object/public/courses_questions_imgs/${question.question}`}
+                alt=""
+              />
+            ) : (
+              <h1>
+                {inx} : {question.question}
+              </h1>
+            )}
+            <div className={exam.answers}>
+              {question.answers.map((answer, inn) => {
+                return (
+                  <div
+                    name={inx}
+                    id={inn}
+                    onClick={(e) => handleSelect(inx, e)}
+                    className={`${
+                      Object.keys(question).includes("selectedAnswer")
+                        ? question.selectedAnswer === inn
+                          ? "answer selected_answer"
+                          : "answer"
+                        : "answer"
+                    }`}
+                    key={inn}
+                  >
+                    {abcd[inn]} : {answer}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+      <button onClick={handleSubmit}>تسليم</button>
+    </div>
+  ) : (
+    examData && (
       <Result examId={examId.current} questions={examData.questions} />
-    ))
+    )
   );
 }
 
