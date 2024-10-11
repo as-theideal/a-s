@@ -64,7 +64,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   gap: 20px;
 }
 .courses_list .course {
@@ -112,7 +112,8 @@
 }
 
 .banned_users,
-.unapproved_users {
+.unapproved_users,
+.exams {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -121,7 +122,9 @@
   box-sizing: border-box;
 }
 .banned_users .banned_user,
-.unapproved_user {
+.unapproved_user,
+.exam .upper_section,
+.record {
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -131,14 +134,31 @@
   border-radius: 10px;
   align-items: center;
 }
+.record {
+  background-color: #d1d1d1;
+}
+
+.exam .records {
+  margin: auto;
+  margin-top: 10px;
+  width: 95%;
+  max-height: 400px;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
 .banned_user span,
-.unapproved_user span {
+.unapproved_user span,
+.exam span {
   background-color: var(--primary-color);
   border-radius: 10px;
   padding: 5px 15px;
   color: var(--normal-color);
   cursor: pointer;
 }
-.banned_users p {
+.banned_users p,
+.exam p {
   text-align: center;
 }

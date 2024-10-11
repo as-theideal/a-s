@@ -11,6 +11,7 @@ import Years from "./components/years/Years";
 import Admin from "./components/admin/Admin";
 import Success from "./components/success/Success";
 import supabase from "./Supabase";
+import Exam from "./components/exam/Exam";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -62,6 +63,7 @@ function App() {
         <Route path="/years/*" element={<Years />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/success/*" element={<Success />} />
+        <Route path="/exam/*" element={<Exam />} />
       </Routes>
     </BrowserRouter>
   );

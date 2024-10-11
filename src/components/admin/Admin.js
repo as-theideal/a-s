@@ -18,15 +18,19 @@ function Admin() {
   const [faqsNav, setFaqsNav] = useState("all");
 
   // State to hold sections for each course
-  const [coursesSections, setCoursesSections] = useState([]);
+  const [coursesSections] = useState([]);
   // State to hold banned for each course
   const [banned, setBanned] = useState([]);
 
   // State to hold unapproved for each course
   const [unapproved, setUnapproved] = useState([]);
 
+  const [exams, setExams] = useState([]);
+
   // State to track the currently active panel in the admin interface
   const [activePanal, setActivePanal] = useState("");
+
+  const [activeExam, setActiveExam] = useState(null);
 
   // State to track the currently active course
   const [activeCourse, setActiveCourse] = useState("");
@@ -67,8 +71,9 @@ function Admin() {
   const [answer3, setAnswer3] = useState("");
   const [answer4, setAnswer4] = useState("");
 
+  const [mcqTimer, setMcqTimer] = useState();
   // Ref to hold the title of the MCQ
-  const mcqTitle = useRef("");
+  const [mcqTitle, setMcqTitle] = useState("");
 
   // Array of functions to set answers (for easier management)
   const answers_name = [setAnswer1, setAnswer2, setAnswer3, setAnswer4];
@@ -155,6 +160,12 @@ function Admin() {
       .then(async ({ data }) => {
         setFaqs(data);
       });
+    supabase
+      .from("exams")
+      .select("*")
+      .then(async ({ data }) => {
+        setExams(data);
+      });
   }, []);
 
   const addVideo = async () => {
@@ -219,30 +230,84 @@ function Admin() {
   };
   const addMcq = async () => {
     if (correctAnswers.length === questions.length) {
-      await supabase
-        .from(activeCourse)
-        .select("content")
-        .eq("id", activeSection)
-        .then(async ({ data, error }) => {
-          if (!error) {
-            await supabase
-              .from(activeCourse)
-              .update([
-                {
-                  content: [
-                    ...data[0].content,
-                    {
-                      content: questions,
-                      type: "mcq",
-                      correct_answers: correctAnswers,
-                      title: mcqTitle.current.value,
-                    },
-                  ],
-                },
-              ])
-              .eq("id", activeSection);
-          }
-        });
+      if (activePanal === "addmcq") {
+        await supabase
+          .from(activeCourse)
+          .select("content")
+          .eq("id", activeSection)
+          .then(async ({ data, error }) => {
+            if (!error) {
+              await supabase
+                .from(activeCourse)
+                .update([
+                  {
+                    content: [
+                      ...data[0].content,
+                      {
+                        content: questions,
+                        type: "mcq",
+                        correct_answers: correctAnswers,
+                        title: mcqTitle,
+                      },
+                    ],
+                  },
+                ])
+                .eq("id", activeSection);
+            }
+          });
+      } else if (activePanal === "addExam") {
+        await supabase
+          .from("exams")
+          .insert([
+            {
+              correct_answers: correctAnswers,
+              title: mcqTitle,
+              questions: questions,
+              timer: mcqTimer,
+            },
+          ])
+          .select("*")
+          .then(async ({ error, data }) => {
+            if (error) {
+              Toast(error.message);
+              return;
+            }
+            setExams((prev) => [
+              ...prev,
+              {
+                correct_answers: correctAnswers,
+                title: mcqTitle,
+                questions: questions,
+                timer: mcqTimer,
+              },
+            ]);
+            await navigator.clipboard
+              .writeText(data[0].id)
+              .then(Toast("تم نسخ الرابط"));
+          });
+      } else if (activePanal === "editExam") {
+        await supabase
+          .from("exams")
+          .update([
+            {
+              correct_answers: correctAnswers,
+              title: mcqTitle,
+              questions: questions,
+              timer: mcqTimer,
+            },
+          ])
+          .eq("id", activeExam)
+          .select("*")
+          .then(async ({ error, data }) => {
+            if (error) {
+              Toast(error.message);
+              return;
+            }
+            setExams(data);
+          });
+        window.location.reload();
+      }
+      setActiveExam(null);
     } else {
       Toast("اضغط على التالي قبل التسليم");
     }
@@ -321,7 +386,7 @@ function Admin() {
       );
     } else {
       setQuestion("");
-      answers_name.map((answer, inn) => answer(""));
+      answers_name.map((answer) => answer(""));
       questionImg.current.value = "";
     }
   };
@@ -343,7 +408,7 @@ function Admin() {
       );
     } else {
       setQuestion("");
-      answers_name.map((answer, inn) => answer(""));
+      answers_name.map((answer) => answer(""));
     }
   };
 
@@ -359,7 +424,7 @@ function Admin() {
         },
       ])
       .select("id")
-      .then(({ data, error }) => setNewCourseId(data[0].id));
+      .then(({ data }) => setNewCourseId(data[0].id));
   };
   const handleShowUpdateAnswerForm = (inx) => {
     document.querySelectorAll(".update_answer_form").forEach((form, inn) => {
@@ -433,14 +498,44 @@ function Admin() {
         );
       });
   };
+  const showExam = (id) => {
+    setActiveExam((prev) => (prev === id ? null : id));
+  };
+  const editExam = (inx) => {
+    setQuestions(exams[inx].questions);
+    setCorrectANswers(exams[inx].correct_answers);
+
+    setQuestion(exams[inx].questions[0].question);
+    answers_name.map((answer, inn) =>
+      answer(exams[inx].questions[0].answers[inn])
+    );
+    setMcqTitle(exams[inx].title);
+    setMcqTimer(exams[inx].timer);
+    setActivePanal((prev) => (prev === "editExam" ? null : "editExam"));
+  };
 
   if (authenticated && coursesSections && courses) {
     return (
       <div className={admin.admin}>
         <div className={admin.add_element_active_panal}>
-          {activePanal === "addmcq" ? (
+          {activePanal === "addmcq" ||
+          activePanal === "addExam" ||
+          activePanal === "editExam" ? (
             <div className={admin.add_mcq}>
-              <input ref={mcqTitle} type="text" placeholder="العنوان" />
+              {activePanal === "addExam" || activePanal === "editExam" ? (
+                <input
+                  value={mcqTimer}
+                  onChange={(e) => setMcqTimer(e.target.value)}
+                  type="number"
+                  placeholder="توقيت"
+                />
+              ) : null}
+              <input
+                value={mcqTitle}
+                onChange={(e) => setMcqTitle(e.target.value)}
+                type="text"
+                placeholder="العنوان"
+              />
               <input type="file" ref={questionImg} onChange={uploadFile} />
               <div className={admin.add_mcq_inputs} id="add_mcq_inputs">
                 <input
@@ -692,6 +787,75 @@ function Admin() {
               </div>
             );
           })}
+        </div>
+        <hr />
+        <div className={admin.exams}>
+          {exams.length ? (
+            exams.map((exam, inx) => {
+              return (
+                <div className={admin.exam} key={exam.id}>
+                  <div className={admin.upper_section}>
+                    <p>{exam.title}</p>
+                    <div>
+                      <span
+                        style={{ textAlign: "center" }}
+                        onClick={async () => showExam(exam.id)}
+                      >
+                        {activeExam === exam.id ? "Hide" : "Show"}
+                      </span>
+                      <span
+                        style={{ textAlign: "center", marginLeft: 20 }}
+                        onClick={async () =>
+                          await navigator.clipboard
+                            .writeText(
+                              `https://dr-ahmed-salama.com/exam/${exam.id}`
+                            )
+                            .then(Toast("تم النسخ"))
+                        }
+                      >
+                        C
+                      </span>
+                    </div>
+                  </div>
+                  {activeExam === exam.id && (
+                    <div className={admin.records}>
+                      <span
+                        onClick={() => {
+                          editExam(inx);
+                          window.scrollTo({
+                            top: 50,
+                            behavior: "smooth",
+                          });
+                        }}
+                      >
+                        تعديل الامتحان
+                      </span>
+                      {exam.records.map((record, inn) => {
+                        return (
+                          <div className={admin.record} key={inn}>
+                            <p>{record.name}</p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          ) : (
+            <p>لا توجد امتحانات حتى الان.</p>
+          )}
+          <button
+            onClick={() => {
+              setActivePanal("addExam");
+              window.scrollTo({
+                top: 50,
+                behavior: "smooth",
+              });
+            }}
+          >
+            اضافة امتحان
+          </button>
         </div>
         <hr />
         <div className={admin.banned_users}>
