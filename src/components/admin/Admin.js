@@ -25,6 +25,8 @@ function Admin() {
   // State to hold unapproved for each course
   const [unapproved, setUnapproved] = useState([]);
 
+  const [users, setUsers] = useState([]);
+
   const [exams, setExams] = useState([]);
 
   // State to track the currently active panel in the admin interface
@@ -58,6 +60,9 @@ function Admin() {
   const courseYearToAdd = useRef();
   const courseImgToAdd = useRef();
   const sectionTitleToAdd = useRef();
+  const resetDeviceEmail = useRef();
+  const [searchUser, setSearchUser] = useState("");
+  const [resetDevice, setResetDevice] = useState([]);
 
   // State to hold the ID of the newly created course
   const [newCourseId, setNewCourseId] = useState("");
@@ -279,10 +284,11 @@ function Admin() {
                 title: mcqTitle,
                 questions: questions,
                 timer: mcqTimer,
+                id: data[0].id,
               },
             ]);
             await navigator.clipboard
-              .writeText(data[0].id)
+              .writeText("https://dr-ahmed-salama.com/exam/" + data[0].id)
               .then(Toast("تم نسخ الرابط"));
           });
       } else if (activePanal === "editExam") {
@@ -484,10 +490,12 @@ function Admin() {
           );
         });
       supabase.from("devices").delete().eq("email", email);
+      users.length &&
+        setUsers((prev) => prev.filter((unapproved) => unapproved.id !== id));
     });
   };
   const approveUser = (id) => {
-    Toast("تم فك الحظر");
+    Toast("تم القبول");
     supabase
       .from("users")
       .update([{ approved: true }])
@@ -513,7 +521,35 @@ function Admin() {
     setMcqTimer(exams[inx].timer);
     setActivePanal((prev) => (prev === "editExam" ? null : "editExam"));
   };
-
+  const handleResetDevice = async (id) => {
+    await supabase
+      .from("devices")
+      .delete()
+      .eq("id", id)
+      .then(() => {
+        Toast("تم");
+        setResetDevice([]);
+      });
+  };
+  const handleFetchResetDevice = async () => {
+    supabase
+      .from("devices")
+      .select("name,id")
+      .eq("email", resetDeviceEmail.current.value)
+      .then(({ data }) => {
+        setResetDevice(data);
+        Toast(`${data.length ? "تم" : "لا يوجد"}`);
+      });
+  };
+  const fetchUsers = async (year) => {
+    await supabase
+      .from("users")
+      .select("id,email,phone,parent_phone,name")
+      .eq("year", year)
+      .then(({ data }) => {
+        setUsers(data);
+      });
+  };
   if (authenticated && coursesSections && courses) {
     return (
       <div className={admin.admin}>
@@ -884,7 +920,7 @@ function Admin() {
                 return (
                   <div className={admin.unapproved_user} key={index}>
                     <p>{user.name}</p>
-                    <div>
+                    <div style={{ display: "flex", alignItems: "center" }}>
                       <p>{user.year}</p>
                       <span
                         onDoubleClick={() => deleteUser(user.id, user.email)}
@@ -905,6 +941,129 @@ function Admin() {
             </>
           ) : (
             <p style={{ textAlign: "center" }}>لا يوجد مستخدمون معلقون</p>
+          )}
+        </div>
+        <hr />
+        <div className={admin.reset_device}>
+          <p draggable>اعادة التعيين : </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            <input
+              type="email"
+              placeholder="الاميل : "
+              ref={resetDeviceEmail}
+            />
+            <button onClick={handleFetchResetDevice}>بحث</button>
+          </div>
+          <div className={admin.reset_device_list} style={{ marginTop: 10 }}>
+            {resetDevice.map((el) => {
+              return (
+                <div className={admin.reset_device_card} key={el.id}>
+                  <span>{el.name}</span>
+                  <button
+                    style={{
+                      backgroundColor: "red",
+                      color: "white",
+                      padding: "2px 10px",
+                      borderRadius: "5px",
+                      marginRight: 20,
+                    }}
+                    onClick={() => handleResetDevice(el.id)}
+                  >
+                    X
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <hr />
+        <div className={admin.users}>
+          <div
+            className={admin.users_header}
+            style={{
+              justifyContent: "center",
+              gap: 20,
+              backgroundColor: "transparent",
+            }}
+          >
+            <button onClick={() => fetchUsers(2)}>2</button>
+            <button onClick={() => fetchUsers(3)}>3</button>
+          </div>
+          {users.length ? (
+            <>
+              <input
+                type="text"
+                value={searchUser}
+                onChange={(e) => setSearchUser(e.target.value)}
+                placeholder="اسم الطالب :"
+                style={{ maxWidth: 300, margin: "auto" }}
+              />
+              <table style={{ display: "table" }} className={admin.users_list}>
+                <tr>
+                  <th>الاسم</th>
+                  <th>الرقم</th>
+                  <th>رقم ولي الامر</th>
+                </tr>
+                {searchUser
+                  ? users.map(
+                      (user) =>
+                        user.name.includes(searchUser) && (
+                          <tr
+                            className={admin.user}
+                            style={{
+                              width: "fit-content",
+                              textAlign: "center",
+                              display: "table-row",
+                            }}
+                          >
+                            <td>{user.name}</td>
+                            <td>{user.phone}</td>
+                            <td>{user.parent_phone}</td>
+                            <td>
+                              <button
+                                style={{
+                                  backgroundColor: "red",
+                                  padding: "7px 15px",
+                                }}
+                                onClick={() => deleteUser(user.id, user.email)}
+                              >
+                                X
+                              </button>
+                            </td>
+                          </tr>
+                        )
+                    )
+                  : users.map((user) => {
+                      return (
+                        <tr
+                          className={admin.user}
+                          style={{
+                            width: "fit-content",
+                            textAlign: "center",
+                            display: "table-row",
+                          }}
+                        >
+                          <td>{user.name}</td>
+                          <td>{user.phone}</td>
+                          <td>{user.parent_phone}</td>
+                          <td>
+                            <button
+                              style={{
+                                backgroundColor: "red",
+                                padding: "7px 15px",
+                              }}
+                              onClick={() => deleteUser(user.id, user.email)}
+                            >
+                              X
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+              </table>
+            </>
+          ) : (
+            <p style={{ textAlign: "center" }}>اختار المرحلة</p>
           )}
         </div>
         <hr />

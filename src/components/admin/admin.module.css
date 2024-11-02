@@ -113,7 +113,8 @@
 
 .banned_users,
 .unapproved_users,
-.exams {
+.examsو .reset_device_list,
+.users {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -124,7 +125,10 @@
 .banned_users .banned_user,
 .unapproved_user,
 .exam .upper_section,
-.record {
+.record,
+.reset_device_card,
+.user,
+.users_header {
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -133,6 +137,21 @@
   background-color: #fff;
   border-radius: 10px;
   align-items: center;
+}
+.users {
+  width: 100%;
+  overflow-x: scroll;
+}
+.users table {
+  -webkit-border-vertical-spacing: 5px;
+  -webkit-border-horizontal-spacing: 3px;
+}
+table td {
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+table tr {
+  outline: 1px dotted var(--primary-color);
 }
 .record {
   background-color: #d1d1d1;

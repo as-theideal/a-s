@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import home from "./home.module.css";
 import { NavLink } from "react-router-dom";
 import Footer from "./Footer";
-import first from "../../assets/icons8-first-50.svg";
 import second from "../../assets/icons8-medal-second-place-50 (1).svg";
 import third from "../../assets/icons8-medal-third-place-50 (1).svg";
 import wats from "../../assets/waQrCode.png";
@@ -78,10 +77,6 @@ function HomeYears() {
         </div>
 
         <div className={home.middle_col}>
-          <div className={home.item}>
-            <ReactSVG src={first} style={{ marginTop: -10 }} />
-            <NavLink to="years/1">اولى ثانوي</NavLink>
-          </div>
           <div className={home.item}>
             <ReactSVG src={second} style={{ marginTop: -10 }} />
             <NavLink to="years/2">ثانية ثانوي</NavLink>

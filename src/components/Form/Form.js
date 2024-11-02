@@ -16,7 +16,7 @@ function Form({ type, sendUserData }) {
   const [forgetPass, setForgetPass] = useState(false);
   const [code, setCode] = useState("");
   const [select, setSelect] = useState("true");
-  const [year, setYear] = useState(1);
+  const [year, setYear] = useState(2);
 
   const reset = () => {
     setName("");
@@ -268,7 +268,7 @@ function Form({ type, sendUserData }) {
                       type="text"
                       placeholder="الاسم رباعي :"
                       value={name}
-                      onChange={(e) => setName(e.target.value.trim())}
+                      onChange={(e) => setName(e.target.value)}
                     />
                     <span
                       style={{
@@ -395,7 +395,6 @@ function Form({ type, sendUserData }) {
                       value={year}
                       onChange={(e) => setYear(e.target.value)}
                     >
-                      <option value={1}>اولى ثانوي</option>
                       <option value={2}>ثانية ثانوي</option>
                       <option value={3}>ثالثة ثانوي</option>
                     </select>
