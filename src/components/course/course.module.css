@@ -12,10 +12,12 @@
 .course .active_panal {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 5px 3px;
   border-radius: 10px;
-  width: 100%;
-  border: 1px solid #000;
-  height: fit-content;
   overflow: hidden;
+  display: flex;
+  margin: auto;
+  max-width: 800px;
+  width: 100%;
+  box-sizing: border-box;
 }
 .course .elements {
   display: flex;
