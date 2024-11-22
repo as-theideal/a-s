@@ -49,6 +49,7 @@ p {
 .element svg {
   width: 30px;
   height: 30px;
+  fill: var(--primary-color);
 }
 .questions_panal {
   display: flex;

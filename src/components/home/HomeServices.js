@@ -1,88 +1,82 @@
 import home from "./home.module.css";
-import timesaving from "../../assets/time.png";
-import highquality from "../../assets/highQuality.png";
-import homeworks from "../../assets/exams.png";
-import qanda from "../../assets/faq.png";
-import { useRef } from "react";
-
-import { Pagination, EffectCreative, Autoplay } from "swiper/modules";
-
-import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/autoplay";
-import "swiper/css/effect-creative";
-
+import { useEffect, useRef, useState } from "react";
+import { DotLottiePlayer } from "@dotlottie/react-player";
+import portfoliolottie from "../../assets/Animation - 1732276626901.json";
+import upperwave from "../../assets/rb_1708.png";
+import Wave from "react-wavify";
 function HomeBenefits() {
-  const platform = window.innerWidth <= 450;
-  const progressCircle = useRef(null);
-  const progressContent = useRef(null);
-  const onAutoplayTimeLeft = (s, time, progress) => {
-    progressCircle.current.style.setProperty("--progress", 1 - progress);
-    progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
+  const [jobTitle, setJobTitle] = useState("الكيميا في جيبك");
+  const jobTitleAnimation = () => {
+    let overlay = document.getElementsByClassName("overlay")[0].style;
+    const jobs = ["شرح بسيط", "متابعة دورية", "امتحانات دورية", "وفر وقتك"];
+    let i = 1;
+
+    setInterval(() => {
+      overlay.animationName = "to-right";
+
+      setTimeout(() => {
+        setJobTitle(jobs[i]);
+        i === jobs.length - 1 ? (i = 0) : ++i;
+        overlay.animationName = "to-left";
+      }, 1000);
+    }, 5000);
   };
+  useEffect(() => {
+    jobTitleAnimation();
+  }, []);
+
   return (
     <div className={home.services}>
-      <Swiper
-        modules={[Pagination, EffectCreative, Autoplay]}
-        loop={true}
-        effect={platform ? "creative" : null}
-        grabCursor={true}
-        creativeEffect={{
-          prev: {
-            shadow: false,
-            translate: [0, 0, -4000],
-          },
-          next: {
-            translate: ["100%", 0, 0],
-          },
-        }}
-        slidesPerView={platform ? 1 : 2}
-        centeredSlides={platform}
-        autoplay={{
-          delay: 3000,
-          disableOnInteraction: false,
-        }}
-        onAutoplayTimeLeft={onAutoplayTimeLeft}
-        pagination={{ clickable: true, dynamicBullets: true }}
-      >
-        <SwiperSlide>
-          <div className={home.card}>
-            <img src={timesaving} alt="service_img" />
-            <p>وفر وقتك الغالي</p>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className={home.card}>
-            <img src={highquality} alt="service_img" />
-            <p>محتوى على اعلى مستوى</p>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className={home.card}>
-            <img src={homeworks} alt="service_img" />
+      <div className={home.upperwave}>
+        <Wave
+          fill="#ff9201"
+          paused={false}
+          style={{ display: "flex" }}
+          options={{
+            height: 50,
+            amplitude: 40,
+            speed: 0.15,
+            points: 6,
+          }}
+        />
+      </div>
+      <div className={home.lowerwave}>
+        <Wave
+          fill="#333"
+          paused={false}
+          style={{ display: "flex" }}
+          options={{
+            height: 50,
+            amplitude: 40,
+            speed: 0.15,
+            points: 6,
+          }}
+        />
+      </div>
 
-            <p>واجبات و امتحانات دورية</p>
-          </div>
-        </SwiperSlide>
-        <SwiperSlide>
-          <div className={home.card} style={{ zIndex: 2 }}>
-            <img src={qanda} alt="service_img" />
-
-            <p>اسأل و احنا نجاوبك</p>
-          </div>
-        </SwiperSlide>
-        <div className="autoplay-progress" slot="container-end">
-          <svg viewBox="0 0 48 48" ref={progressCircle}>
-            <circle cx="24" cy="24" r="20"></circle>
-          </svg>
-          <span ref={progressContent}></span>
+      <div className={home.lottie}>
+        <DotLottiePlayer src={portfoliolottie} autoplay loop></DotLottiePlayer>
+      </div>
+      <div className={home.text}>
+        <div className={home.firstH1}>
+          <h1>الكيمياء بشكل</h1>
+          <span></span>
         </div>
-      </Swiper>
-      {/* <div className={home.services_banner}></div> */}
+        <h1
+          id={home.secondh1}
+          style={{
+            color: "var(--secondary-color)",
+            marginRight: 150,
+            textWrap: "nowrap",
+          }}
+        >
+          جديد و بسيط
+        </h1>
+        <div className="job-box">
+          <h2 className="job-title">{jobTitle}</h2>
+          <div className="overlay"></div>
+        </div>
+      </div>
     </div>
   );
 }

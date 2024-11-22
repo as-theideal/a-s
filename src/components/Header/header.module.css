@@ -11,6 +11,7 @@ header {
 }
 header .nav {
   flex: 1;
+  height: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -39,6 +40,10 @@ header a {
   gap: 5px;
   text-align: center;
 }
+header svg {
+  width: 80px;
+  height: 80px;
+}
 .login svg {
   width: 30px;
   transform: rotateZ(90deg);
@@ -47,6 +52,7 @@ header a {
 .user_icon svg {
   width: 50px;
   cursor: pointer;
+  fill: var(--primary-color);
 }
 header .drop_menu {
   position: absolute;

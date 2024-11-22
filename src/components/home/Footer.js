@@ -3,12 +3,15 @@ import home from "./home.module.css";
 
 function Footer() {
   return (
+    <div className={home.footer} >
+      
     <a
       href="https://mohamed-alkfrawy.github.io/portfolio/"
-      className={home.footer}
-    >
+      
+      >
       created by Mohamed Alkfrawy
     </a>
+      </div>
   );
 }
 
