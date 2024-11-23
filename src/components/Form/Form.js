@@ -3,6 +3,7 @@ import form from "./form.module.css";
 import supabase from "../../Supabase";
 import { useNavigate } from "react-router-dom";
 import Toast from "../toast/Toast";
+import img from "../../assets/2151807330.jpg";
 
 function Form({ type, sendUserData }) {
   const [name, setName] = useState("");
@@ -279,44 +280,48 @@ function Form({ type, sendUserData }) {
                       الاسم الرباعي :
                     </span>
                   </div>
-                  <div>
-                    <input
-                      name="phone"
-                      required
-                      type="number"
-                      placeholder="رقم الهاتف :"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                    />
-                    <span
-                      style={{
-                        animationName: `${!phone ? "hide_span" : "show_span"}`,
-                        right: 0,
-                      }}
-                    >
-                      رقم الهاتف :
-                    </span>
-                  </div>
-                  <div>
-                    <input
-                      name="phone"
-                      required
-                      type="number"
-                      placeholder=" رقم هاتف ولي الامر :"
-                      value={parentPhone}
-                      onChange={(e) => setParentPhone(e.target.value)}
-                    />
-                    <span
-                      style={{
-                        animationName: `${
-                          !parentPhone ? "hide_span" : "show_span"
-                        }`,
-                        right: 0,
-                      }}
-                    >
-                      رقم هاتف ولي الامر :
-                    </span>
-                  </div>
+                  <box style={{ display: "flex", gap: 50 }}>
+                    <div>
+                      <input
+                        name="phone"
+                        required
+                        type="number"
+                        placeholder="رقم الهاتف :"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                      />
+                      <span
+                        style={{
+                          animationName: `${
+                            !phone ? "hide_span" : "show_span"
+                          }`,
+                          right: 0,
+                        }}
+                      >
+                        رقم الهاتف :
+                      </span>
+                    </div>
+                    <div>
+                      <input
+                        name="phone"
+                        required
+                        type="number"
+                        placeholder=" رقم هاتف ولي الامر :"
+                        value={parentPhone}
+                        onChange={(e) => setParentPhone(e.target.value)}
+                      />
+                      <span
+                        style={{
+                          animationName: `${
+                            !parentPhone ? "hide_span" : "show_span"
+                          }`,
+                          right: 0,
+                        }}
+                      >
+                        رقم هاتف ولي الامر :
+                      </span>
+                    </div>
+                  </box>
                 </Fragment>
               )}
               <div>
@@ -338,7 +343,7 @@ function Form({ type, sendUserData }) {
                   البريد الالكتروني :
                 </span>
               </div>
-              <div>
+              <div id={form.pass}>
                 <input
                   name="password"
                   required
@@ -380,7 +385,7 @@ function Form({ type, sendUserData }) {
                 </span>
               </div>
               {formType && (
-                <>
+                <div style={{ display: "flex", gap: "50px" }}>
                   <div>
                     <select
                       value={select}
@@ -399,7 +404,7 @@ function Form({ type, sendUserData }) {
                       <option value={3}>ثالثة ثانوي</option>
                     </select>
                   </div>
-                </>
+                </div>
               )}
               {type === "login" && (
                 <p
@@ -414,7 +419,7 @@ function Form({ type, sendUserData }) {
               )}
               <input
                 type="submit"
-                value={formType ? "التسجيل" : "تسجيل الدخول"}
+                value={formType ? "انشاء حساب" : "تسجيل الدخول"}
                 name="submit"
                 style={{
                   pointerEvents: `${wait ? "none" : "all"}`,
@@ -425,6 +430,9 @@ function Form({ type, sendUserData }) {
           )}
         </div>
       </form>
+      <div style={{ height: "100vh", display: "flex" }}>
+        {window.innerWidth >= 450 && <img src={img} alt="image" />}
+      </div>
     </div>
   );
 }

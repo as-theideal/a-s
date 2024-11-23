@@ -1,21 +1,24 @@
 .form {
-  background: transparent;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 320px;
-  margin: auto;
-  margin-bottom: 50px;
-  margin-top: 150px;
-  padding: 20px 10px;
-  border-radius: 10px;
-  gap: 10px;
-  box-shadow: var(--shadow);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  height: 100vh;
+}
+.form img {
+  filter: grayscale(0.2);
+  height: 100%;
+}
+.form form {
+  height: 100%;
+  background-color: #fff;
 }
 .form .inner {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding: 30px;
+  padding-top: 150px;
+  box-sizing: border-box;
 }
 .form .inner div {
   display: flex;
@@ -24,19 +27,24 @@
   align-items: center;
   width: 100%;
 }
-.form .inner div div {
+.form .inner p {
+  font-size: 14px;
+  background-color: #eee;
+  border-radius: 10px;
+  width: fit-content;
+  padding: 7px 30px;
+}
+.form .inner #pass div {
   position: absolute;
   left: 10px;
   top: 50%;
   translate: 0 -50%;
   width: fit-content;
 }
-.form .inner div div svg {
+.form .inner #pass div svg {
   width: 25px;
   height: 25px;
-}
-.form img {
-  width: 100px;
+  fill: var(--secondary-color);
 }
 hr {
   width: 20%;
@@ -44,24 +52,23 @@ hr {
 }
 .form input {
   width: 100%;
-
   padding-top: 15px;
   border: none;
   outline: none;
   font-size: 15px;
-  background-color: var(--normal-color);
   border-bottom: var(--primary-color) 1px solid;
   color: var(--text-color);
 }
 .form input[name="submit"] {
   background-color: var(--primary-color);
-  color: var(--text-color);
-  font-size: 20px;
-  padding: 10px 20px;
-  border-radius: 20px;
+  color: var(--normal-color);
+  font-size: 25px;
+  padding: 5px 20px;
+  margin-top: 10px;
+  border-radius: 10px;
   cursor: pointer;
-  border: 1px solid var(--secondary-color);
-  outline: 1px solid var(--primary-color);
+  border: 3px solid #fff;
+  outline: 2px solid var(--primary-color);
   box-sizing: border-box;
 }
 .form button {
@@ -94,10 +101,14 @@ hr {
   border-radius: 10px;
   font-weight: bold;
 }
-@media (max-width: 768px) {
+@media (max-width: 450px) {
   .form {
-    width: 90vw;
-    padding: 20px 0;
-    margin-bottom: 50px;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+  }
+  .form form {
+    width: 100%;
+    height: 100%;
   }
 }
