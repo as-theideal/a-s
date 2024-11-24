@@ -5,7 +5,6 @@ import Toast from "../toast/Toast";
 import Profile from "./profile/Profile";
 import Courses from "./courses/CoursesPanal";
 import Payments from "./payments/Payments";
-import LeftColTitle from "./left-col-title/LeftColTitle";
 import Faqs from "./faqs/Faqs";
 
 function User({ isLoggedIn }) {
@@ -218,38 +217,36 @@ function User({ isLoggedIn }) {
                   >
                     ملفي الشخصي
                   </button>
-                  <button
-                    onClick={() => setActiveCom("courses")}
-                    className={activeCom === "courses" ? userStyle.active : ""}
-                  >
-                    كورساتي
-                  </button>
-                  <button
-                    onClick={() => setActiveCom("faqs")}
-                    className={activeCom === "faqs" ? userStyle.active : ""}
-                  >
-                    اسئلتي
-                  </button>
-                  <button
-                    onClick={() => setActiveCom("payments")}
-                    className={activeCom === "payments" ? userStyle.active : ""}
-                  >
-                    فواتيري
-                  </button>
+                  {courses.length > 0 && (
+                    <button
+                      onClick={() => setActiveCom("courses")}
+                      className={
+                        activeCom === "courses" ? userStyle.active : ""
+                      }
+                    >
+                      كورساتي
+                    </button>
+                  )}
+                  {faqs.length > 0 && (
+                    <button
+                      onClick={() => setActiveCom("faqs")}
+                      className={activeCom === "faqs" ? userStyle.active : ""}
+                    >
+                      اسئلتي
+                    </button>
+                  )}
+                  {invoices > 0 && (
+                    <button
+                      onClick={() => setActiveCom("payments")}
+                      className={
+                        activeCom === "payments" ? userStyle.active : ""
+                      }
+                    >
+                      فواتيري
+                    </button>
+                  )}
                 </div>
                 <div className={userStyle.left_col}>
-                  <LeftColTitle
-                    text={
-                      activeCom === "profile"
-                        ? "ملفي الشخصي"
-                        : activeCom === "courses"
-                        ? "كورساتي"
-                        : activeCom === "faqs"
-                        ? "اسئلتي"
-                        : "فواتيري"
-                    }
-                  />
-
                   {activeCom === "profile" ? (
                     <Profile user={user} />
                   ) : activeCom === "courses" ? (

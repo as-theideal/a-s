@@ -14,7 +14,6 @@ function Courses({ courses, userType, userId }) {
                     src={`https://as-theideal.b-cdn.net/courses_imgs/${course.img_url}`}
                     alt="img"
                   />
-                  <hr />
                   <p>{course.title}</p>
                 </div>
               </NavLink>
