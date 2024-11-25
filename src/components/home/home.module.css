@@ -228,10 +228,9 @@
   gap: 50px;
 }
 .years .row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   justify-items: center;
-  gap: 50px;
+  gap: 20px;
   width: 100%;
 }
 .normalitem,
@@ -250,12 +249,14 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  max-width: 300px;
+  width: 50%;
+  height: 50px;
   transition-duration: 1s;
   z-index: 1;
   padding: 10px 0;
   border: 1px solid var(--secondary-color);
   box-shadow: none;
+  font-size: 1.3em;
 }
 .normalitem img {
   transition-duration: 0.3s;
@@ -292,32 +293,31 @@
 }
 
 .special_item svg {
-  width: 150px;
-  height: 150px;
   fill: var(--secondary-color);
   transition-duration: 1s;
 }
-.special_item img {
-  position: absolute;
-  width: 90%;
-  height: 200px;
-  bottom: -200%;
-  visibility: hidden;
-  transition-duration: 1s;
+
+.special_item div {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr;
+  justify-items: center;
+  align-items: center;
+  gap: 5px;
+  color: var(--secondary-color);
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+  justify-content: space-evenly;
 }
 .special_item:hover {
-  height: 380px;
-  border: 1px solid var(--primary-color);
+  border-color: var(--primary-color);
 }
 .special_item:hover svg {
-  translate: 0 -100px;
   fill: var(--primary-color);
-  width: 100px;
-  height: 100px;
+  scale: 1.3;
 }
-.special_item:hover img {
-  bottom: 20px;
-  visibility: visible;
+.special_item:hover div {
+  color: var(--primary-color);
 }
 
 .footer {
@@ -349,7 +349,6 @@
   .services {
     display: flex;
     flex-direction: column;
-    margin-bottom: 100px;
     padding: 50px 0;
     padding-bottom: 100px;
     height: fit-content;
@@ -374,6 +373,9 @@
     align-items: center;
   }
   .years .row div {
+    width: 100%;
+  }
+  .years .row .special_item {
     width: 100%;
   }
   .edge {

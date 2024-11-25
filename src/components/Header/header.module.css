@@ -37,7 +37,6 @@ header a {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px;
   text-align: center;
 }
 header svg {
@@ -46,7 +45,6 @@ header svg {
 }
 .login svg {
   width: 30px;
-  transform: rotateZ(90deg);
 }
 
 .user_icon svg {

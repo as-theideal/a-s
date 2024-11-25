@@ -61,6 +61,7 @@ function Header({ isLoggedIn, setIsLoggedIn, userName }) {
                       حسابي
                     </NavLink>
                   </li>
+                  <hr />
                   <li>
                     <button
                       onClick={() => {
