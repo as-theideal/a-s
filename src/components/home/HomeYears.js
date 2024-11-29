@@ -4,8 +4,6 @@ import home from "./home.module.css";
 import { NavLink } from "react-router-dom";
 import second from "../../assets/magnified-cancer-cells-highlight-genetic-mutations-epidemic-generated-by-ai.jpg";
 import third from "../../assets/16477.jpg";
-import wats from "../../assets/waQrCode.png";
-import fb from "../../assets/fb_qr.svg";
 
 function HomeYears() {
   const animate = {

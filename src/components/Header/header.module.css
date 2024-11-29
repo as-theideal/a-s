@@ -3,11 +3,11 @@ header {
   height: 100px;
   width: 100%;
   font-size: 20px;
-  background-color: transparent;
   position: absolute;
   top: 0;
   right: 0;
   z-index: 99;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 header .nav {
   flex: 1;
@@ -17,8 +17,7 @@ header .nav {
   align-items: center;
 }
 header img {
-  width: 90px;
-  height: 100%;
+  width: 70px;
 }
 
 header a {
@@ -97,7 +96,7 @@ header .drop_menu li:first-of-type {
   color: var(--primary-color);
   z-index: 1;
   font-size: 15px;
-  border-radius: 20px;
+  border-radius: 5px;
 }
 
 .button::before,

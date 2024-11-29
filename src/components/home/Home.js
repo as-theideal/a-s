@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment } from "react";
 import home from "./home.module.css";
 import HomePortfolio from "./HomePortfolio";
 import HomeServices from "./HomeServices";
@@ -8,7 +8,7 @@ import { DotLottiePlayer } from "@dotlottie/react-player";
 import "@dotlottie/react-player/dist/index.css";
 import Footer from "./Footer";
 
-function Home({ isLoggedIn }) {
+function Home() {
   const homes = [<HomePortfolio />, <HomeServices />, <HomeYears />];
 
   return (

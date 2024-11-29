@@ -2,7 +2,6 @@ import home from "./home.module.css";
 import { useEffect, useRef, useState } from "react";
 import { DotLottiePlayer } from "@dotlottie/react-player";
 import portfoliolottie from "../../assets/Animation - 1732276626901.json";
-import upperwave from "../../assets/rb_1708.png";
 import Wave from "react-wavify";
 function HomeBenefits() {
   const [jobTitle, setJobTitle] = useState("الكيميا في جيبك");

@@ -235,7 +235,7 @@ function User({ isLoggedIn }) {
                       اسئلتي
                     </button>
                   )}
-                  {invoices > 0 && (
+                  {invoices.length > 0 && (
                     <button
                       onClick={() => setActiveCom("payments")}
                       className={

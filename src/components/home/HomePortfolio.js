@@ -31,50 +31,28 @@ const HomePortfolio = () => {
       animate="visible"
       className={home.portfolio}
     >
-      {window.innerWidth > 450 ? (
-        <>
-          <div className={home.scroll}>
-            <span>Scroll</span>
-            <span></span>
-          </div>
-          <div className={home.portfolio_img}>
-            <img src={portfolioimg} alt="personal img" loading="lazy" />
-          </div>
-          <div className={home.text}>
-            <div className={home.portofolio_lottie}>
-              <DotLottiePlayer
-                src={portfoliolottie}
-                autoplay
-                loop
-              ></DotLottiePlayer>
-            </div>
-            <h1>Dr \</h1>
-            <h2>
-              Ahmed Salama
-              <span>The ideal in chemistry</span>
-            </h2>
-          </div>
-        </>
-      ) : (
-        <>
-          <div className={home.text}>
-            <div className={home.portofolio_lottie}>
-              <DotLottiePlayer
-                src={portfoliolottie}
-                autoplay
-                loop
-              ></DotLottiePlayer>
-            </div>
-            <h1>Dr \</h1>
-            <h2>
-              Ahmed Salama<span>The ideal in chemistry</span>
-            </h2>
-          </div>
-          <div className={home.portfolio_img}>
-            <img src={portfolioimg} alt="personal img" loading="lazy" />
-          </div>
-        </>
-      )}
+      <div className={home.scroll}>
+        <span>Scroll</span>
+        <span></span>
+      </div>
+
+      <div className={home.text}>
+        <div className={home.portofolio_lottie}>
+          <DotLottiePlayer
+            src={portfoliolottie}
+            autoplay
+            loop
+          ></DotLottiePlayer>
+        </div>
+        <h1>د /</h1>
+        <h2>
+          أحمد سلامة
+          <span>The ideal in chemistry</span>
+        </h2>
+      </div>
+      <div className={home.portfolio_img}>
+        <img src={portfolioimg} alt="personal img" loading="lazy" />
+      </div>
     </motion.div>
   );
 };

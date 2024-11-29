@@ -220,7 +220,7 @@ img {
   height: 100%;
   animation-duration: 1s;
   animation-fill-mode: forwards;
-  background-color: #eee;
+  background-color: #fff;
 }
 .job-box .overlay::after {
   content: "";

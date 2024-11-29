@@ -1,7 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Amiri+Quran&display=swap");
 @font-face {
   font-family: main_font;
-  src: url("../../assets/fonts/Yellow\ Ginger.ttf");
+  src: url("../../assets/fonts/Kufam-VariableFont_wght.ttf");
 }
 @font-face {
   font-family: second_font;
@@ -11,19 +10,19 @@
 .home {
   position: relative;
   overflow: hidden;
+  background-color: #fff;
 }
 .scroll {
   position: absolute;
-  bottom: 80px;
-  right: 50%;
-  margin-left: 50%;
+  bottom: 5px;
+  margin: auto;
   font-size: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   color: var(--primary-color);
-  font-family: "main_font";
+  font-family: "second_font";
   animation: upanddown 1s infinite alternate;
   font-weight: 900;
   letter-spacing: 1px;
@@ -50,18 +49,7 @@
   height: 200px;
   z-index: 2;
 }
-.home::after {
-  content: "";
-  background-image: url(../../assets/home_bg.svg);
-  height: 100%;
-  width: 100%;
-  background-repeat: repeat;
-  background-size: 500px;
-  position: absolute;
-  top: 0;
-  opacity: 0.04;
-  z-index: -1;
-}
+
 .portfolio {
   flex: 1;
   display: grid;
@@ -87,32 +75,33 @@
   flex-direction: column;
   height: fit-content;
   position: relative;
-  direction: ltr;
   text-wrap: nowrap;
 }
 .portfolio .text h1 {
-  font-size: 1.3em;
+  font-size: 1.1em;
   color: var(--secondary-color);
   margin: 0;
   font-family: "second_font";
 }
 .portfolio .text h2 {
-  font-size: 1.8em;
+  font-size: 2em;
   color: var(--primary-color);
   margin: 0;
+  margin-right: 40px;
+  margin-top: 10px;
   font-family: "main_font";
-  text-align: center;
+  text-align: left;
   position: relative;
 }
 .portfolio h2::first-letter {
-  font-size: 1.3em;
+  font-size: 1.2em;
   vertical-align: text-top;
 }
 
 .portfolio h2 span {
   position: absolute;
-  bottom: 35%;
-  left: 25%;
+  bottom: 10%;
+  left: 5%;
   letter-spacing: 5px;
   color: var(--secondary-color);
   font-size: 0.2em;
@@ -123,7 +112,6 @@
 .services {
   display: grid;
   grid-template-columns: 1fr 2fr;
-  background-color: #eee;
   border-radius: 20px;
   width: 100vw !important;
   align-items: center;
@@ -342,9 +330,6 @@
     font-size: 6vw;
     margin: 50px 0;
     padding: 0 !important;
-  }
-  .portfolio h2 span {
-    bottom: 30%;
   }
   .services {
     display: flex;

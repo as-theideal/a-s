@@ -55,7 +55,7 @@ function App() {
         userName={userName}
       />
       <Routes>
-        <Route exact path="/" element={<Home isLoggedIn={isLoggedIn} />} />
+        <Route exact path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp sendUserData={getUserData} />} />
         <Route path="/login" element={<Login sendUserData={getUserData} />} />
         <Route path="/user" element={<User isLoggedIn={isLoggedIn} />} />
