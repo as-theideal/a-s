@@ -138,7 +138,7 @@ function Course() {
       });
   };
   return (
-    data.length && (
+    data.length > 0 && (
       <div className={courseStyle.course}>
         <div className="container">
           <div className={courseStyle.inner}>
